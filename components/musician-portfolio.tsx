@@ -4,9 +4,9 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Play, Download, FileText, Video, Music, Star, Loader2 } from "lucide-react"
+import { Play, Download, FileText, Video, Music, Star, Loader2, AlertCircle } from "lucide-react"
 import { useState, useEffect } from "react"
-import { client, musicWorksQuery, uniqueTagsQuery } from "@/lib/sanity"
+import { client, musicWorksQuery, uniqueTagsQuery, healthCheckQuery } from "@/lib/sanity"
 
 interface MusicWork {
   _id: string
@@ -14,8 +14,8 @@ interface MusicWork {
   description: string
   type: "Recording" | "Score" | "Live Performance" | "Experimental" | "Commissioned"
   mediaType: "audio" | "video" | "document"
-  mediaUrl?: string
-  thumbnailUrl?: string
+  mediaUrl?: string | null
+  thumbnailUrl?: string | null
   tags: string[]
   dateCompleted: string
   collaborators: string[]
@@ -31,21 +31,75 @@ export function MusicianPortfolio() {
   const [filter, setFilter] = useState<string>("all")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error">("checking")
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
+        setError(null)
+
+        // First, test the connection
+        console.log("Testing Sanity connection...")
+        const healthCheck = await client.fetch(healthCheckQuery)
+        console.log(`Sanity connection successful. Found ${healthCheck} music works.`)
+        setConnectionStatus("connected")
+
+        if (healthCheck === 0) {
+          // No works found, but connection is working
+          setMusicWorks([])
+          setAvailableTags([])
+          setError("No music works found in your Sanity dataset. Add some works to get started!")
+          return
+        }
 
         // Fetch both works and available tags
-        const [works, tags] = await Promise.all([client.fetch(musicWorksQuery), client.fetch(uniqueTagsQuery)])
+        console.log("Fetching music works and tags...")
+        const [works, tags] = await Promise.all([
+          client.fetch(musicWorksQuery).catch((err) => {
+            console.error("Error fetching works:", err)
+            return []
+          }),
+          client.fetch(uniqueTagsQuery).catch((err) => {
+            console.error("Error fetching tags:", err)
+            return []
+          }),
+        ])
 
-        setMusicWorks(works || [])
+        console.log("Fetched works:", works)
+        console.log("Fetched tags:", tags)
+
+        // Filter out works with critical missing data
+        const validWorks = (works || []).filter((work: MusicWork) => {
+          if (!work.title || !work.description) {
+            console.warn(`Skipping work with missing title/description:`, work)
+            return false
+          }
+          return true
+        })
+
+        setMusicWorks(validWorks)
         setAvailableTags(tags || [])
         setError(null)
       } catch (err) {
         console.error("Error fetching music works:", err)
-        setError("Failed to load music works. Please check your Sanity configuration.")
+        setConnectionStatus("error")
+
+        // Provide more specific error messages
+        if (err instanceof Error) {
+          if (err.message.includes("projectId")) {
+            setError("Sanity project ID is missing or invalid. Please check your environment variables.")
+          } else if (err.message.includes("dataset")) {
+            setError("Sanity dataset not found. Please check your dataset name in environment variables.")
+          } else if (err.message.includes("token")) {
+            setError("Sanity API token is invalid. Please check your token permissions.")
+          } else {
+            setError(`Connection error: ${err.message}`)
+          }
+        } else {
+          setError("Failed to connect to Sanity. Please check your configuration.")
+        }
+
         // Fallback to empty arrays
         setMusicWorks([])
         setAvailableTags([])
@@ -115,10 +169,22 @@ export function MusicianPortfolio() {
   if (error) {
     return (
       <div className="text-center py-20">
+        <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
         <p className="text-red-400 text-lg mb-4">{error}</p>
-        <p className="text-gray-400">
-          Make sure your Sanity project is set up and environment variables are configured.
-        </p>
+        <div className="text-gray-400 space-y-2">
+          <p>
+            Connection Status:{" "}
+            <span className={connectionStatus === "connected" ? "text-green-400" : "text-red-400"}>
+              {connectionStatus}
+            </span>
+          </p>
+          <p>Make sure your Sanity project is set up and environment variables are configured:</p>
+          <div className="text-sm bg-gray-800 p-4 rounded-lg mt-4 text-left max-w-md mx-auto">
+            <p>NEXT_PUBLIC_SANITY_PROJECT_ID={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "not set"}</p>
+            <p>NEXT_PUBLIC_SANITY_DATASET={process.env.NEXT_PUBLIC_SANITY_DATASET || "not set"}</p>
+            <p>SANITY_API_TOKEN={process.env.SANITY_API_TOKEN ? "set" : "not set"}</p>
+          </div>
+        </div>
       </div>
     )
   }
@@ -169,13 +235,19 @@ export function MusicianPortfolio() {
                       src={work.thumbnailUrl || "/placeholder.svg"}
                       alt={work.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.warn(`Failed to load thumbnail for ${work.title}:`, work.thumbnailUrl)
+                        e.currentTarget.style.display = "none"
+                      }}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">{getMediaIcon(work.mediaType)}</div>
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">
+                      {getMediaIcon(work.mediaType)}
+                    </div>
                   )}
 
                   {/* Media Type Icon */}
-                  <div className="absolute top-4 left-4 bg-black/80 p-2 rounded-full">
+                  <div className="absolute top-4 left-4 bg-black/80 p-2 rounded-full text-white">
                     {getMediaIcon(work.mediaType)}
                   </div>
 

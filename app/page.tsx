@@ -5,6 +5,7 @@ import { Header } from "@/components/header"
 import { ProfileSection } from "@/components/profile-section"
 import { ContactSection } from "@/components/contact-section"
 import { VideoPlayer } from "@/components/video-player"
+import { AnimatedName } from "@/components/animated-name"
 
 export default function HomePage() {
   return (
@@ -20,22 +21,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <h1 className="text-6xl md:text-8xl font-bold leading-none tracking-tight">
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  EZRA
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  HAUGABROOKS
-                </motion.div>
-              </h1>
+              <AnimatedName />
             </motion.div>
 
             <ContactSection />

@@ -2,7 +2,6 @@ import { createClient } from "@sanity/client"
 import imageUrlBuilder from "@sanity/image-url"
 
 // These will be your actual Sanity project credentials
-// For now, using placeholder values
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your-project-id",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
@@ -17,7 +16,7 @@ export function urlFor(source: any) {
   return builder.image(source)
 }
 
-// GROQ queries for musician works
+// Improved GROQ queries with proper null handling
 export const musicWorksQuery = `
   *[_type == "musicianWork"] | order(featured desc, dateCompleted desc) {
     _id,
@@ -25,8 +24,15 @@ export const musicWorksQuery = `
     description,
     type,
     mediaType,
-    "mediaUrl": mediaFile.asset->url,
-    "thumbnailUrl": thumbnail.asset->url,
+    "mediaUrl": select(
+      mediaFile.asset != null => mediaFile.asset->url,
+      externalVideoUrl != null => externalVideoUrl,
+      null
+    ),
+    "thumbnailUrl": select(
+      thumbnail.asset != null => thumbnail.asset->url,
+      null
+    ),
     tags,
     dateCompleted,
     collaborators,
@@ -45,8 +51,15 @@ export const featuredWorksQuery = `
     description,
     type,
     mediaType,
-    "mediaUrl": mediaFile.asset->url,
-    "thumbnailUrl": thumbnail.asset->url,
+    "mediaUrl": select(
+      mediaFile.asset != null => mediaFile.asset->url,
+      externalVideoUrl != null => externalVideoUrl,
+      null
+    ),
+    "thumbnailUrl": select(
+      thumbnail.asset != null => thumbnail.asset->url,
+      null
+    ),
     tags,
     dateCompleted,
     collaborators,
@@ -64,8 +77,15 @@ export const worksByTagQuery = (tag: string) => `
     description,
     type,
     mediaType,
-    "mediaUrl": mediaFile.asset->url,
-    "thumbnailUrl": thumbnail.asset->url,
+    "mediaUrl": select(
+      mediaFile.asset != null => mediaFile.asset->url,
+      externalVideoUrl != null => externalVideoUrl,
+      null
+    ),
+    "thumbnailUrl": select(
+      thumbnail.asset != null => thumbnail.asset->url,
+      null
+    ),
     tags,
     dateCompleted,
     collaborators,
@@ -94,4 +114,9 @@ export const cvWorksQuery = `
 // Get unique tags from all works (for dynamic filter generation)
 export const uniqueTagsQuery = `
   array::unique(*[_type == "musicianWork"].tags[])
+`
+
+// Health check query to test connection
+export const healthCheckQuery = `
+  count(*[_type == "musicianWork"])
 `

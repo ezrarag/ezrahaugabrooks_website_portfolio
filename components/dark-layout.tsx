@@ -23,8 +23,13 @@ export function DarkLayout({ children, title, description }: DarkLayoutProps) {
       >
         <div className="flex items-center justify-between">
           <Link href="/">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="text-2xl font-bold">
-              EZRA
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="text-2xl font-bold"
+              style={{ direction: "rtl" }}
+            >
+              עזרה
             </motion.div>
           </Link>
 
@@ -141,7 +146,7 @@ export function DarkLayout({ children, title, description }: DarkLayoutProps) {
 
             <div className="text-right">
               <div>All rights reserved,</div>
-              <div>EZRA ©2024</div>
+              <div style={{ direction: "rtl" }}>עזרה ©2024</div>
             </div>
           </div>
         </div>
