@@ -24,7 +24,7 @@ export function DarkLayout({ children, title, description }: DarkLayoutProps) {
         <div className="flex items-center justify-between">
           <Link href="/">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="text-2xl font-bold">
-              YUYA
+              EZRA
             </motion.div>
           </Link>
 
@@ -131,17 +131,17 @@ export function DarkLayout({ children, title, description }: DarkLayoutProps) {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
             <div className="space-y-1">
               <div>+81 (0)90 1234 5678</div>
-              <div>hello@yuya.com</div>
+              <div>hello@ezra.com</div>
             </div>
 
             <div className="text-center">
               <div>Designed & Developed</div>
-              <div>by Peter Hodak</div>
+              <div>by Ezra Haugabrooks</div>
             </div>
 
             <div className="text-right">
               <div>All rights reserved,</div>
-              <div>YUYA ©2024</div>
+              <div>EZRA ©2024</div>
             </div>
           </div>
         </div>

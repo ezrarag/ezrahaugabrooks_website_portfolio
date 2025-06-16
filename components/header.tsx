@@ -21,7 +21,7 @@ export function Header() {
       <div className="flex items-center justify-between">
         <Link href="/">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="text-2xl font-bold">
-            YUYA
+            EZRA
           </motion.div>
         </Link>
 

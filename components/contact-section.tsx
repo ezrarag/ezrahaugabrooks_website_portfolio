@@ -6,7 +6,7 @@ import { useState } from "react"
 
 export function ContactSection() {
   const [copied, setCopied] = useState(false)
-  const email = "hello@yume.com"
+  const email = "hello@ezra.com"
 
   const copyEmail = async () => {
     try {

@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Play, Download } from "lucide-react"
+import { MusicianPortfolio } from "@/components/musician-portfolio"
+import { ResumeGenerator } from "@/components/resume-generator"
 
 export default function MusicPage() {
   const compositions = [
@@ -49,6 +51,19 @@ export default function MusicPage() {
       title="MUSIC"
       description="Creating original compositions that bridge classical traditions with contemporary innovation and collaborative exploration."
     >
+      {/* Resume Generator */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="mb-12"
+      >
+        <ResumeGenerator />
+      </motion.div>
+
+      {/* Musician Portfolio */}
+      <MusicianPortfolio />
+
       {/* Compositions Section */}
       <section>
         <motion.h2
