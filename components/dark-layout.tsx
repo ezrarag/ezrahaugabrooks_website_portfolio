@@ -136,7 +136,7 @@ export function DarkLayout({ children, title, description }: DarkLayoutProps) {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
             <div className="space-y-1">
               <div>+81 (0)90 1234 5678</div>
-              <div>hello@ezra.com</div>
+              <div>info@עזרה.online</div>
             </div>
 
             <div className="text-center">

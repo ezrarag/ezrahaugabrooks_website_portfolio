@@ -8,8 +8,12 @@ import { Badge } from "@/components/ui/badge"
 import { Play, Download } from "lucide-react"
 import { MusicianPortfolio } from "@/components/musician-portfolio"
 import { ResumeGenerator } from "@/components/resume-generator"
+import { SanityConnectionTest } from "@/components/sanity-connection-test"
+import { useState } from "react"
 
 export default function MusicPage() {
+  const [showConnectionTest, setShowConnectionTest] = useState(true)
+
   const compositions = [
     {
       title: "Symphony No. 1 in D Minor",
@@ -51,6 +55,29 @@ export default function MusicPage() {
       title="MUSIC"
       description="Creating original compositions that bridge classical traditions with contemporary innovation and collaborative exploration."
     >
+      {/* Connection Test - Show initially, can be dismissed */}
+      {showConnectionTest && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-white">Sanity Integration Status</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowConnectionTest(false)}
+              className="text-gray-400 hover:text-white"
+            >
+              Dismiss
+            </Button>
+          </div>
+          <SanityConnectionTest />
+        </motion.div>
+      )}
+
       {/* Resume Generator */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -64,8 +91,8 @@ export default function MusicPage() {
       {/* Musician Portfolio */}
       <MusicianPortfolio />
 
-      {/* Compositions Section */}
-      <section>
+      {/* Static Compositions Section (fallback) */}
+      <section className="mt-16">
         <motion.h2
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}

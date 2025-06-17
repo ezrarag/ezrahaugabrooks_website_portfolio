@@ -6,9 +6,9 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Portfolio - Eye of Horus Navigation",
+  title: "עזרה",
   description:
-    "Modern portfolio website with animated Eye of Horus navigation - Developer, Linguist, Composer, Educator",
+    "Portfolio website with framer motion - Developer, Linguist, Composer, Educator",
   keywords: ["portfolio", "developer", "linguist", "composer", "educator", "web development"],
   authors: [{ name: "Portfolio Owner" }],
   openGraph: {

@@ -21,7 +21,7 @@ export function ProfileSection() {
         className="flex justify-end"
       >
         <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-200">
-          <img src="/placeholder.svg?height=200&width=200" alt="Profile" className="w-full h-full object-cover" />
+          <img src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200" alt="Profile" className="w-full h-full object-cover" />
         </div>
       </motion.div>
 

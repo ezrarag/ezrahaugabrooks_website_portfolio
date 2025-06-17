@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 const nameVariations = [
   "עזרה",
   "HELP",
-  "01000101 01011010 01010010 01000001", // Binary for EZRA
+  "01000101 01011010", // Binary for EZRA
   "457A7261", // Hex for EZRA
   "ע׳ ז׳ ר׳ ה׳", // Gematria spelling
   "EZRA",
