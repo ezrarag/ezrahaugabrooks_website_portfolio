@@ -3,6 +3,7 @@
 import { Play } from "lucide-react"
 import { motion } from "framer-motion"
 import clsx from "clsx"
+import { LightboxModal } from "./LightBoxModal"
 
 interface MusicProject {
   id: string
@@ -12,8 +13,10 @@ interface MusicProject {
   mediaUrl?: string
   type: "image" | "video" | "interactive"
   color?: string
-  role?: "composer" | "performer" | "conductor"
+  role?: "composer" | "performer" | "conductor" | "pianist"
   composer?: string
+  date?: string 
+  event?: string
 }
 
 interface Props {
@@ -33,7 +36,14 @@ export function MusicProjectCard({ project, index }: Props) {
     composer,
   } = project
 
-  const isVideo = type === "video" && mediaUrl?.endsWith(".mp4" || ".mov")
+  {project.date && (
+  <p className="text-xs text-white/60 mt-1">{new Date(project.date).toLocaleDateString()}</p>
+)}
+{project.event && (
+  <p className="text-xs text-white/60">{project.event}</p>
+)}
+
+  const isVideo = type === "video" && (mediaUrl?.endsWith(".mp4") || mediaUrl?.endsWith(".mov"))
   const isAudio = type === "video" && mediaUrl?.endsWith(".mp3")
 
   return (

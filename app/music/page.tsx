@@ -1,12 +1,20 @@
 "use client"
 
+import { useState } from "react"
 import { MinimalLayout } from "@/components/minimal-layout"
 import { MinimalProjectGrid } from "@/components/minimal-project-grid"
 import { MusicianPortfolio } from "@/components/musician-portfolio"
+import { LightboxModal } from "@/components/LightBoxModal"
 import { motion } from "framer-motion"
+import type { Project } from "@/components/minimal-project-grid"
 
 export default function MusicPage() {
-  const featuredProjects = [
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+
+  const handleOpen = (project: Project) => setSelectedProject(project)
+  const handleClose = () => setSelectedProject(null)
+
+  const featuredProjects: Project[] = [
     {
       id: "1",
       title: "Symphony No. V",
@@ -14,6 +22,9 @@ export default function MusicPage() {
       type: "video",
       role: "conductor",
       composer: "Ludwig van Beethoven",
+      date: "2020-06-15",
+      location: "Atlanta, GA",
+      event: "AUCSO - CAU Board Meeting",
       mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
       color: "#667eea",
     },
@@ -22,9 +33,9 @@ export default function MusicPage() {
       title: "Piano Sonata Op. 2 No. 1",
       subtitle: "Adagio • 4:02",
       type: "video",
-      role: "pianist",
+      role: "pianist", // NOTE: this role needs to be added to the `role` union in `Project`
       composer: "Ludwig van Beethoven",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
+      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//pov_cam_beethoven.mp4",
       color: "#764ba2",
     },
     {
@@ -51,16 +62,18 @@ export default function MusicPage() {
 
   return (
     <MinimalLayout title="music">
-      {/* Featured Projects Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="mb-16"
       >
-        <MinimalProjectGrid projects={featuredProjects} />
+        <MinimalProjectGrid projects={featuredProjects} onOpen={handleOpen} />
       </motion.div>
-      
+
+      {selectedProject && (
+        <LightboxModal project={selectedProject} onClose={handleClose} />
+      )}
     </MinimalLayout>
   )
 }
