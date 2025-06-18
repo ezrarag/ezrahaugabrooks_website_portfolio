@@ -19,12 +19,12 @@ export default function MusicPage() {
     },
     {
       id: "2",
-      title: "Digital Soundscapes",
-      subtitle: "Electronic • Experimental",
+      title: "Piano Sonata Op. 2 No. 1",
+      subtitle: "Adagio • 4:02",
       type: "video",
-      role: "composer",
-      composer: "Ezra Haugabrooks",
-      image: "/placeholder.svg?height=400&width=600&text=Digital+Audio",
+      role: "pianist",
+      composer: "Ludwig van Beethoven",
+      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
       color: "#764ba2",
     },
     {
@@ -60,9 +60,9 @@ export default function MusicPage() {
       >
         <MinimalProjectGrid projects={featuredProjects} />
       </motion.div>
-
+      
       {/* Full Portfolio Section */}
-      <motion.div
+      {/*<motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
@@ -70,7 +70,7 @@ export default function MusicPage() {
       >
         <h2 className="text-sm font-light tracking-wide text-gray-400 mb-8 uppercase">Complete Portfolio</h2>
         <MusicianPortfolio />
-      </motion.div>
+      </motion.div>*/}
     </MinimalLayout>
   )
 }
