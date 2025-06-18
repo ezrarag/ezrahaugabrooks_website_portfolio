@@ -1,6 +1,6 @@
 "use client"
 
-import { MusicProjectCard } from "./music-project-card"
+import { MusicProjectCard } from "./MusicProjectCard"
 
 interface Project {
   id: string
