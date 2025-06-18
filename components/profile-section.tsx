@@ -33,7 +33,7 @@ export function ProfileSection() {
         className="space-y-6"
       >
         <p className="text-xl leading-relaxed">
-          Hello, I'm a freelancer specializing in minimal design with 10 years of expertise — based in Tokyo, Japan.{" "}
+          Hi, I’m a creative technologist and independent designer based in Atlanta, Georgia — blending minimal design with thoughtful interaction. Let’s build something meaningful.{" "}
           <motion.span className="underline decoration-2 underline-offset-4" whileHover={{ scale: 1.05 }}>
             Let's create!
           </motion.span>
