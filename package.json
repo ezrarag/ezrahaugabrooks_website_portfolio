@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/xai": "latest",
     "@emotion/is-prop-valid": "latest",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-tabs": "^1.0.4",
     "@sanity/client": "latest",
     "@sanity/image-url": "latest",
+    "@supabase/supabase-js": "latest",
+    "ai": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "latest",
@@ -23,9 +26,11 @@
     "react": "^18",
     "react-dom": "^18",
     "sanity": "latest",
+    "sonner": "latest",
     "styled-components": "latest",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { Header } from "@/components/header"
 import { ProfileSection } from "@/components/profile-section"
 import { ContactSection } from "@/components/contact-section"
-import { VideoPlayer } from "@/components/video-player"
+import { AiChatCenter } from "@/components/ai-chat-center"
 import { AnimatedName } from "@/components/animated-name"
 
 export default function HomePage() {
@@ -34,7 +34,8 @@ export default function HomePage() {
         </div>
       </main>
 
-      <VideoPlayer />
+      {/* AI Chat Center replaces VideoPlayer */}
+      <AiChatCenter />
     </div>
   )
 }

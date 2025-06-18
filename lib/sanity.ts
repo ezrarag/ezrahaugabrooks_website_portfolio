@@ -6,7 +6,7 @@ export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   useCdn: true, // Set to false if you want fresh data
-  apiVersion: "2024-01-01",
+  apiVersion: "2025-06-17",
   token: process.env.SANITY_API_TOKEN || process.env.SANITY_API_TOKEN_READ, // Use either token
 })
 

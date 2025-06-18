@@ -1,165 +1,68 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { DarkLayout } from "@/components/dark-layout"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Play, Download } from "lucide-react"
+import { MinimalLayout } from "@/components/minimal-layout"
+import { MinimalProjectGrid } from "@/components/minimal-project-grid"
 import { MusicianPortfolio } from "@/components/musician-portfolio"
-import { ResumeGenerator } from "@/components/resume-generator"
-import { SanityConnectionTest } from "@/components/sanity-connection-test"
-import { useState } from "react"
+import { motion } from "framer-motion"
 
 export default function MusicPage() {
-  const [showConnectionTest, setShowConnectionTest] = useState(true)
-
-  const compositions = [
+  const featuredProjects = [
     {
-      title: "Symphony No. 1 in D Minor",
-      description: "A four-movement orchestral work exploring themes of transformation and renewal",
-      duration: "42:30",
-      instrumentation: "Full Orchestra",
-      image: "/placeholder.svg?height=300&width=400",
-      audioUrl: "#",
-      scoreUrl: "#",
-      year: "2023",
-      category: "Classical",
+      id: "1",
+      title: "Symphony No. 1",
+      subtitle: "Orchestral • 42:30",
+      image: "/placeholder.svg?height=400&width=600&text=Symphony",
+      type: "video" as const,
+      color: "#667eea",
     },
     {
+      id: "2",
       title: "Digital Soundscapes",
-      description: "Electronic composition blending organic and synthetic textures",
-      duration: "28:15",
-      instrumentation: "Electronic/Digital",
-      image: "/placeholder.svg?height=300&width=400",
-      audioUrl: "#",
-      scoreUrl: "#",
-      year: "2024",
-      category: "Electronic",
+      subtitle: "Electronic • Experimental",
+      image: "/placeholder.svg?height=400&width=600&text=Digital+Audio",
+      type: "video" as const,
+      color: "#764ba2",
     },
     {
-      title: "Chamber Quartet in A",
-      description: "Intimate piece for string quartet with contemporary harmonies",
-      duration: "18:45",
-      instrumentation: "String Quartet",
-      image: "/placeholder.svg?height=300&width=400",
-      audioUrl: "#",
-      scoreUrl: "#",
-      year: "2023",
-      category: "Chamber Music",
+      id: "3",
+      title: "BEAM Collaborative Suite",
+      subtitle: "Mixed Ensemble • Think Tank",
+      image: "/placeholder.svg?height=400&width=600&text=BEAM+Project",
+      type: "interactive" as const,
+      color: "#f093fb",
+    },
+    {
+      id: "4",
+      title: "Chamber Quartet",
+      subtitle: "String Quartet • Contemporary",
+      image: "/placeholder.svg?height=400&width=600&text=Chamber+Music",
+      type: "video" as const,
+      color: "#4facfe",
     },
   ]
 
   return (
-    <DarkLayout
-      title="MUSIC"
-      description="Creating original compositions that bridge classical traditions with contemporary innovation and collaborative exploration."
-    >
-      {/* Connection Test - Show initially, can be dismissed */}
-      {showConnectionTest && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-white">Sanity Integration Status</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowConnectionTest(false)}
-              className="text-gray-400 hover:text-white"
-            >
-              Dismiss
-            </Button>
-          </div>
-          <SanityConnectionTest />
-        </motion.div>
-      )}
-
-      {/* Resume Generator */}
+    <MinimalLayout title="music">
+      {/* Featured Projects Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="mb-12"
+        className="mb-16"
       >
-        <ResumeGenerator />
+        <MinimalProjectGrid projects={featuredProjects} />
       </motion.div>
 
-      {/* Musician Portfolio */}
-      <MusicianPortfolio />
-
-      {/* Static Compositions Section (fallback) */}
-      <section className="mt-16">
-        <motion.h2
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-bold mb-8"
-        >
-          Featured Compositions
-        </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {compositions.map((piece, index) => (
-            <motion.div
-              key={piece.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
-              whileHover={{ y: -10, scale: 1.02 }}
-            >
-              <Card className="bg-gray-900 border-gray-800 overflow-hidden h-full">
-                <div className="aspect-video bg-gray-800 relative">
-                  <img
-                    src={piece.image || "/placeholder.svg"}
-                    alt={piece.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <Badge className="absolute top-4 left-4 bg-white text-black">{piece.category}</Badge>
-                  <Badge className="absolute top-4 right-4 bg-gray-900/80 text-white">{piece.year}</Badge>
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-white">{piece.title}</CardTitle>
-                  <CardDescription className="text-gray-400">{piece.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                    <div>
-                      <span className="text-gray-400">Duration:</span>
-                      <span className="text-white ml-2">{piece.duration}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Instrumentation:</span>
-                      <span className="text-white ml-2">{piece.instrumentation}</span>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Button size="sm" className="bg-white text-black hover:bg-gray-200 flex-1" asChild>
-                      <a href={piece.audioUrl} target="_blank" rel="noopener noreferrer">
-                        <Play className="w-4 h-4 mr-1" />
-                        Listen
-                      </a>
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-gray-700 text-gray-300 hover:bg-gray-800"
-                      asChild
-                    >
-                      <a href={piece.scoreUrl} target="_blank" rel="noopener noreferrer">
-                        <Download className="w-4 h-4 mr-1" />
-                        Score
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-    </DarkLayout>
+      {/* Full Portfolio Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="border-t border-gray-800 pt-16"
+      >
+        <h2 className="text-sm font-light tracking-wide text-gray-400 mb-8 uppercase">Complete Portfolio</h2>
+        <MusicianPortfolio />
+      </motion.div>
+    </MinimalLayout>
   )
 }
