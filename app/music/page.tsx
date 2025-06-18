@@ -61,16 +61,6 @@ export default function MusicPage() {
         <MinimalProjectGrid projects={featuredProjects} />
       </motion.div>
       
-      {/* Full Portfolio Section */}
-      {/*<motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="border-t border-gray-800 pt-16"
-      >
-        <h2 className="text-sm font-light tracking-wide text-gray-400 mb-8 uppercase">Complete Portfolio</h2>
-        <MusicianPortfolio />
-      </motion.div>*/}
     </MinimalLayout>
   )
 }
