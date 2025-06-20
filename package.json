@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync-resumes": "tsx scripts/sync-resumes.ts"
   },
   "dependencies": {
     "@ai-sdk/xai": "^1.2.16",

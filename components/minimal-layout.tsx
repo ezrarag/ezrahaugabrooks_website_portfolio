@@ -1,75 +1,65 @@
 "use client"
 
+import { ReactNode, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { ButtonDropdown } from "./button-dropdown"
-import { useState } from "react"
-import { ResumeGenerator } from "./resume-generator"
-import { AiChatCenter } from "./ai-chat-center"
-import type { ReactNode } from "react"
+import { AiChatCenter } from "@/components/ai-chat-center"
+import { ButtonDropdown } from "@/components/button-dropdown"
 
-interface MinimalLayoutProps {
-  children: ReactNode
-  title: string
+// Add DropdownItem type
+export type DropdownItem = {
+  icon: string
+  label: string
+  onClick?: () => void
+  href?: string
 }
 
-export function MinimalLayout({ children, title }: MinimalLayoutProps) {
+// Add DropdownSection type
+export type DropdownSection = {
+  title: string
+  items: DropdownItem[]
+}
+
+type MinimalLayoutProps = {
+  title: string
+  children: ReactNode
+}
+
+export function MinimalLayout({ title, children }: MinimalLayoutProps) {
   const [showResumeGenerator, setShowResumeGenerator] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
 
-  const openScheduler = () => {
-    // This will open the AI chat center and start a scheduling conversation
-    const chatButton = document.querySelector("[data-chat-trigger]") as HTMLButtonElement
-    if (chatButton) {
-      chatButton.click()
-      // You could also auto-send a scheduling message here
-    }
-  }
-
-  const openCVAI = () => {
-    setShowResumeGenerator(true)
-  }
-
-  const openSearch = () => {
-    setShowSearch(true)
-  }
-
-  const dropdownSections = [
+  // Use DropdownSection[] for type safety
+  const dropdownSections: DropdownSection[] = [
     {
-      title: "Connect",
+      title: "Contact",
       items: [
-        { icon: "📅", label: "Schedule Appointment", onClick: openScheduler },
-        { icon: "💬", label: "Submit Inquiry", href: "/inquiry" },
-      ],
-    },
-    {
-      title: "Documents",
-      items: [
-        { icon: "📄", label: "Download Resume", href: "/resume.pdf" },
-        { icon: "🧠", label: "Generate Custom CV", onClick: openCVAI },
-      ],
-    },
-    {
-      title: "Explore",
-      items: [
-        { icon: "🔍", label: "Search", onClick: openSearch },
-        { icon: "🧭", label: "Developer", href: "/developer" },
-        { icon: "🎵", label: "Music", href: "/music" },
-        { icon: "🗣️", label: "Linguist", href: "/linguist" },
-        { icon: "🎓", label: "Educator", href: "/educator" },
-        { icon: "🎞️", label: "Media", href: "/media" },
+        {
+          icon: "✉️",
+          label: "Email",
+          href: "mailto:your@email.com",
+        },
+        {
+          icon: "🔗",
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/in/your-profile",
+        },
+        {
+          icon: "📄",
+          label: "Resume Generator",
+          onClick: () => setShowResumeGenerator(true),
+        },
       ],
     },
   ]
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Minimal Header */}
+      {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="container mx-auto px-6 py-8"
+        className="sticky top-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/0 container mx-auto px-6 py-4"
       >
         <div className="flex items-center justify-between">
           <Link href="/">
@@ -82,7 +72,7 @@ export function MinimalLayout({ children, title }: MinimalLayoutProps) {
         </div>
       </motion.header>
 
-      {/* Content */}
+      {/* Main Content */}
       <motion.main
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,10 +82,20 @@ export function MinimalLayout({ children, title }: MinimalLayoutProps) {
         {children}
       </motion.main>
 
-      {/* Resume Generator Modal */}
-      {showResumeGenerator && <ResumeGenerator onClose={() => setShowResumeGenerator(false)} />}
+      {/* Resume Generator Modal (optional) */}
+      {showResumeGenerator && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+          <div className="bg-zinc-900 text-white p-6 rounded-xl relative max-w-md">
+            <button className="absolute top-3 right-3" onClick={() => setShowResumeGenerator(false)}>
+              ✕
+            </button>
+            <h3 className="text-xl font-semibold mb-2">Resume Generator</h3>
+            <p>This is a placeholder for your resume generator modal.</p>
+          </div>
+        </div>
+      )}
 
-      {/* AI Chat Center with data attribute for targeting */}
+      {/* AI Chat Center */}
       <div data-chat-trigger>
         <AiChatCenter />
       </div>

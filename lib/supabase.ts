@@ -61,6 +61,21 @@ export interface WorkInquiry {
   created_at: string
 }
 
+export interface Resume {
+  id: string
+  filename: string
+  url: string
+  analysis: any
+  created_at: string
+  updated_at: string
+  metadata: {
+    contentType: string
+    tags?: string[]
+    fileSize?: number
+    uploadedAt?: string
+  }
+}
+
 // Helper functions for document analysis operations
 export const documentAnalysisHelpers = {
   // Create a new document analysis
