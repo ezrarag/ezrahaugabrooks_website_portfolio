@@ -1,9 +1,30 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create a fallback client if environment variables are missing
+let supabase: any
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey)
+} else {
+  console.warn('Missing Supabase environment variables. Using mock client.')
+  // Create a mock client that won't cause crashes
+  supabase = {
+    from: () => ({
+      select: () => Promise.resolve({ data: [], error: null }),
+      insert: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+      update: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+      eq: function() { return this },
+      order: function() { return this },
+      limit: function() { return this },
+      single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+    })
+  }
+}
+
+export { supabase }
 
 // Database types based on our updated schema
 export interface ChatConversation {
