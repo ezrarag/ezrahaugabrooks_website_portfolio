@@ -21,8 +21,11 @@ export default function DeveloperPage() {
           id: project.id,
           title: project.title,
           subtitle: project.subtitle || project.technologies.join(" • "),
-          image: project.image_url || "/placeholder.svg?height=400&width=600&text=" + encodeURIComponent(project.title),
-          type: "image" as const,
+          image: project.live_url 
+            ? `https://api.screenshotone.com/take?url=${encodeURIComponent(project.live_url)}&viewport_width=1200&viewport_height=800&device_scale_factor=1&format=png&block_ads=true&delay=3`
+            : project.image_url || "/placeholder.svg?height=400&width=600&text=" + encodeURIComponent(project.title),
+          mediaUrl: project.live_url, // Add live URL for iframe
+          type: project.live_url ? "interactive" as const : "image" as const,
           color: getProjectColor(project.id),
         }))
         
@@ -74,8 +77,13 @@ export default function DeveloperPage() {
   }
 
   const handleOpen = (project: Project) => {
-    // Handle project opening logic here
-    console.log("Opening project:", project)
+    // Open live URL in new tab if available, otherwise show lightbox
+    if (project.type === "interactive" && project.mediaUrl) {
+      window.open(project.mediaUrl, '_blank')
+    } else {
+      // Handle other project types (could open a lightbox)
+      console.log("Opening project:", project)
+    }
   }
 
   return (

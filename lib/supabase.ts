@@ -66,11 +66,10 @@ export interface DeveloperProject {
   title: string
   subtitle?: string
   description?: string
-  image_url?: string
-  project_url?: string
-  github_url?: string
   technologies: string[]
-  status: string
+  image_url?: string
+  github_url?: string
+  live_url?: string // Add live URL field
   featured: boolean
   sort_order: number
   created_at: string
@@ -205,13 +204,13 @@ export const portfolioHelpers = {
   // Developer Projects
   async getDeveloperProjects(featuredOnly = false) {
     let query = supabase.from("developer_projects").select("*")
-    
+
     if (featuredOnly) {
       query = query.eq("featured", true)
     }
-    
+
     const { data, error } = await query.order("sort_order", { ascending: true })
-    
+
     if (error) throw error
     return data
   },
@@ -222,7 +221,7 @@ export const portfolioHelpers = {
       .insert(project)
       .select()
       .single()
-    
+
     if (error) throw error
     return data
   },
@@ -230,13 +229,13 @@ export const portfolioHelpers = {
   // Linguist Projects
   async getLinguistProjects(featuredOnly = false) {
     let query = supabase.from("linguist_projects").select("*")
-    
+
     if (featuredOnly) {
       query = query.eq("featured", true)
     }
-    
+
     const { data, error } = await query.order("sort_order", { ascending: true })
-    
+
     if (error) throw error
     return data
   },
@@ -247,7 +246,7 @@ export const portfolioHelpers = {
       .insert(project)
       .select()
       .single()
-    
+
     if (error) throw error
     return data
   },
@@ -255,13 +254,13 @@ export const portfolioHelpers = {
   // Music Projects
   async getMusicProjects(featuredOnly = false) {
     let query = supabase.from("music_projects").select("*")
-    
+
     if (featuredOnly) {
       query = query.eq("featured", true)
     }
-    
+
     const { data, error } = await query.order("sort_order", { ascending: true })
-    
+
     if (error) throw error
     return data
   },
@@ -272,7 +271,7 @@ export const portfolioHelpers = {
       .insert(project)
       .select()
       .single()
-    
+
     if (error) throw error
     return data
   },
@@ -280,13 +279,13 @@ export const portfolioHelpers = {
   // Educator Projects
   async getEducatorProjects(featuredOnly = false) {
     let query = supabase.from("educator_projects").select("*")
-    
+
     if (featuredOnly) {
       query = query.eq("featured", true)
     }
-    
+
     const { data, error } = await query.order("sort_order", { ascending: true })
-    
+
     if (error) throw error
     return data
   },
@@ -297,7 +296,7 @@ export const portfolioHelpers = {
       .insert(project)
       .select()
       .single()
-    
+
     if (error) throw error
     return data
   },
