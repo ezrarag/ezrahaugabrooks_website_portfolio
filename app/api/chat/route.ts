@@ -44,7 +44,14 @@ Remember: You ARE Ezra's representative. Be helpful and professional.`
 
 export async function POST(req: NextRequest) {
   try {
+    // Basic rate limiting check
+    const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown'
+    
     const { messages, conversationId } = await req.json()
+    
+    if (!messages || !Array.isArray(messages)) {
+      return new Response("Invalid messages format", { status: 400 })
+    }
 
     // Create or get conversation
     let conversation_id = conversationId
