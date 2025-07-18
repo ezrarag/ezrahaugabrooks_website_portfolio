@@ -134,19 +134,7 @@ function FeaturedProjectCarousel({ projects }: FeaturedProjectCarouselProps) {
         </div>
       </motion.div>
 
-      {/* Progress Indicators */}
-      {projects.length > 1 && (
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {projects.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === currentIndex ? "bg-black" : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-      )}
+      
 
       {/* Project Thumbnail */}
       {currentProject.image_url && (
