@@ -61,6 +61,79 @@ export interface WorkInquiry {
   created_at: string
 }
 
+export interface DeveloperProject {
+  id: string
+  title: string
+  subtitle?: string
+  description?: string
+  image_url?: string
+  project_url?: string
+  github_url?: string
+  technologies: string[]
+  status: string
+  featured: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface LinguistProject {
+  id: string
+  title: string
+  subtitle?: string
+  description?: string
+  image_url?: string
+  project_url?: string
+  languages: string[]
+  project_type?: string
+  status: string
+  featured: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface MusicProject {
+  id: string
+  title: string
+  subtitle?: string
+  description?: string
+  media_url?: string
+  media_type: string
+  role?: string
+  composer?: string
+  duration?: string
+  date?: string
+  location?: string
+  event?: string
+  instruments?: string[]
+  genre?: string
+  featured: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface EducatorProject {
+  id: string
+  title: string
+  subtitle?: string
+  description?: string
+  image_url?: string
+  course_url?: string
+  institution?: string
+  student_count?: number
+  rating?: number
+  duration?: string
+  level?: string
+  topics: string[]
+  status: string
+  featured: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
 export interface Resume {
   id: string
   filename: string
@@ -122,6 +195,109 @@ export const documentAnalysisHelpers = {
       .order("created_at", { ascending: false })
       .limit(limit)
 
+    if (error) throw error
+    return data
+  },
+}
+
+// Helper functions for portfolio operations
+export const portfolioHelpers = {
+  // Developer Projects
+  async getDeveloperProjects(featuredOnly = false) {
+    let query = supabase.from("developer_projects").select("*")
+    
+    if (featuredOnly) {
+      query = query.eq("featured", true)
+    }
+    
+    const { data, error } = await query.order("sort_order", { ascending: true })
+    
+    if (error) throw error
+    return data
+  },
+
+  async createDeveloperProject(project: Partial<DeveloperProject>) {
+    const { data, error } = await supabase
+      .from("developer_projects")
+      .insert(project)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  },
+
+  // Linguist Projects
+  async getLinguistProjects(featuredOnly = false) {
+    let query = supabase.from("linguist_projects").select("*")
+    
+    if (featuredOnly) {
+      query = query.eq("featured", true)
+    }
+    
+    const { data, error } = await query.order("sort_order", { ascending: true })
+    
+    if (error) throw error
+    return data
+  },
+
+  async createLinguistProject(project: Partial<LinguistProject>) {
+    const { data, error } = await supabase
+      .from("linguist_projects")
+      .insert(project)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  },
+
+  // Music Projects
+  async getMusicProjects(featuredOnly = false) {
+    let query = supabase.from("music_projects").select("*")
+    
+    if (featuredOnly) {
+      query = query.eq("featured", true)
+    }
+    
+    const { data, error } = await query.order("sort_order", { ascending: true })
+    
+    if (error) throw error
+    return data
+  },
+
+  async createMusicProject(project: Partial<MusicProject>) {
+    const { data, error } = await supabase
+      .from("music_projects")
+      .insert(project)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data
+  },
+
+  // Educator Projects
+  async getEducatorProjects(featuredOnly = false) {
+    let query = supabase.from("educator_projects").select("*")
+    
+    if (featuredOnly) {
+      query = query.eq("featured", true)
+    }
+    
+    const { data, error } = await query.order("sort_order", { ascending: true })
+    
+    if (error) throw error
+    return data
+  },
+
+  async createEducatorProject(project: Partial<EducatorProject>) {
+    const { data, error } = await supabase
+      .from("educator_projects")
+      .insert(project)
+      .select()
+      .single()
+    
     if (error) throw error
     return data
   },

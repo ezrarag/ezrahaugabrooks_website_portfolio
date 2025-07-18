@@ -1,116 +1,92 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MinimalLayout } from "@/components/minimal-layout"
 import { MinimalProjectGrid } from "@/components/minimal-project-grid"
 import { LightboxModal } from "@/components/LightBoxModal"
 import { motion } from "framer-motion"
 import type { Project } from "@/components/minimal-project-grid"
 import { FileUploader } from "@/components/FileUploader"
+import { portfolioHelpers, type MusicProject } from "@/lib/supabase"
 
 export default function MusicPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [showUploader, setShowUploader] = useState(false)
   const [activeRole, setActiveRole] = useState<string | null>(null)
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
 
   const roles = [
     "Compose", "Mix/Master", "Track a Project",
     "Conduct", "Sing", "Accompany (Piano)", "Section Viola"
   ]
 
-  const featuredProjects: Project[] = [
-    {
-      id: "1",
-      title: "Symphony No. V",
-      subtitle: "Movement IV • 5:33",
-      type: "video",
-      role: "conductor",
-      composer: "Ludwig van Beethoven",
-      date: "2020-06-15",
-      location: "Atlanta, GA",
-      event: "AUCSO - CAU Board Meeting",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
-      color: "#667eea",
-    },
-    {
-      id: "2",
-      title: "Piano Sonata Op. 2 No. 1",
-      subtitle: "Adagio • 4:02",
-      type: "video",
-      role: "pianist",
-      composer: "Ludwig van Beethoven",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//pov_cam_beethoven.mp4",
-      color: "#764ba2",
-    },
-    {
-      id: "3",
-      title: "Black Men Stories",
-      subtitle: "Take 1 • 8:52",
-      type: "interactive",
-      role: "composer",
-      composer: "Ezra Haugabrooks",
-      date: "2019-06-15",
-      location: "Miami, FL",
-      event: "Peter London Global Dance Company Performances",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//plgdc%20-%202019%20-%20first%20video.MOV",
-      color: "#f093fb",
-    },
-    {
-      id: "4",
-      title: "Black Men Stories",
-      subtitle: "Take 2 • 2:49",
-      type: "video",
-      role: "composer",
-      composer: "Ezra Haugabrooks",
-      date: "2019-06-15",
-      location: "Miami, FL",
-      event: "Peter London Global Dance Company Performances",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//plgdc%20-%202019%20-%20second%20video.mov",
-      color: "#4facfe",
-    },
-    {
-      id: "5",
-      title: "La Verbena de la Paloma",
-      subtitle: "Rehearsal Clip I • 4:24",
-      type: "video",
-      role: "conductor",
-      composer: "Tomás Bretón",
-      date: "2018-06-15",
-      location: "Tampa, FL",
-      event: "With Spanish Lyric Theatre and Ballet and Dance Orchestra",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//slt%20-%202018%20-%20rehearsal-video.MOV",
-      color: "#4facfe",
-    },
-    {
-      id: "6",
-      title: "La Verbena de la Paloma",
-      subtitle: "Rehearsal Clip II • 4:24",
-      type: "video",
-      role: "conductor",
-      composer: "Tomás Bretón",
-      date: "2018-06-15",
-      location: "Tampa, FL",
-      event: "With Spanish Lyric Theatre and Ballet and Dance Orchestra",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//slt%20-%202018%20-%20rehearsal%20video%20-%202nd%20upload.MOV",
-      color: "#4facfe",
-    },
-    {
-      id: "7",
-      title: "La Verbena de la Paloma",
-      subtitle: "Rehearsal Clip III • 15:49",
-      type: "video",
-      role: "conductor",
-      composer: "Tomás Bretón",
-      date: "2018-06-15",
-      location: "Tampa, FL",
-      event: "With Spanish Lyric Theatre and Ballet and Dance Orchestra",
-      mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//slt%20-%202018%20-%20rehearsal%20video%20-%202nd%20upload.MOV",
-      color: "#4facfe",
-    },
-  ]
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const data = await portfolioHelpers.getMusicProjects(true) // Get featured projects only
+        
+        // Transform database data to match the Project interface
+        const transformedProjects: Project[] = data.map((project: MusicProject) => ({
+          id: project.id,
+          title: project.title,
+          subtitle: project.subtitle || project.duration,
+          type: project.media_type === "video" ? "video" : project.media_type === "audio" ? "interactive" : "video",
+          role: project.role as any,
+          composer: project.composer,
+          date: project.date,
+          location: project.location,
+          event: project.event,
+          mediaUrl: project.media_url,
+          color: getProjectColor(project.id),
+        }))
+        
+        setFeaturedProjects(transformedProjects.reverse()) // Reverse to match original order
+      } catch (error) {
+        console.error("Error fetching music projects:", error)
+        // Fallback to static data if database fails
+        setFeaturedProjects([
+          {
+            id: "1",
+            title: "Symphony No. V",
+            subtitle: "Movement IV • 5:33",
+            type: "video",
+            role: "conductor",
+            composer: "Ludwig van Beethoven",
+            date: "2020-06-15",
+            location: "Atlanta, GA",
+            event: "AUCSO - CAU Board Meeting",
+            mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
+            color: "#667eea",
+          },
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
+  // Helper function to generate consistent colors for projects
+  function getProjectColor(id: string): string {
+    const colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe", "#11998e", "#38ef7d"]
+    const index = parseInt(id.slice(-1), 16) % colors.length
+    return colors[index]
+  }
 
   const handleOpen = (project: Project) => setSelectedProject(project)
   const handleClose = () => setSelectedProject(null)
+
+  if (loading) {
+    return (
+      <MinimalLayout title="music">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-white">Loading music projects...</div>
+        </div>
+      </MinimalLayout>
+    )
+  }
 
   return (
     <MinimalLayout title="music">
@@ -120,7 +96,7 @@ export default function MusicPage() {
         transition={{ duration: 0.6 }}
         className="mb-16"
       >
-        <MinimalProjectGrid projects={[...featuredProjects].reverse()} onOpen={handleOpen} />
+        <MinimalProjectGrid projects={featuredProjects} onOpen={handleOpen} />
       </motion.div>
 
       {selectedProject && (
