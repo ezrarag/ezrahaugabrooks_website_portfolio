@@ -116,6 +116,12 @@ export function getAIProvider(): AIProvider {
   const providerName = process.env.AI_PROVIDER || 'openrouter'
   
   console.log(`🤖 AI Provider: ${providerName}`)
+  console.log(`🔑 Available Environment Variables:`, {
+    OPENAI_API_KEY: !!process.env.OPENAI_API_KEY,
+    XAI_API_KEY: !!process.env.XAI_API_KEY,
+    OPENROUTER_API_KEY: !!process.env.OPENROUTER_API_KEY,
+    HUGGINGFACE_API_KEY: !!process.env.HUGGINGFACE_API_KEY
+  })
   
   switch (providerName.toLowerCase()) {
     case 'openai':

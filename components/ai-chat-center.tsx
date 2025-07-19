@@ -74,6 +74,16 @@ What would you like to know about Ezra's work, or how can I assist you today?`,
       if (actionType) {
         handleAiAction(actionType)
       }
+
+      // Debug mode detection
+      const debugMode = response.headers.get("x-debug-mode")
+      if (debugMode) {
+        addNotification({
+          type: "inquiry",
+          title: "Debug Mode Active",
+          message: "Using dummy AI response for testing - check console for details"
+        })
+      }
     },
   })
 
@@ -348,9 +358,30 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
                       className="hidden"
                     />
 
-                    <p className="text-xs text-gray-500 mt-2">
-                      💡 Try: "Tell me about Ezra's development work" or "I'd like to schedule a meeting"
-                    </p>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="text-xs text-gray-500">
+                        💡 Try: "Tell me about Ezra's development work" or "I'd like to schedule a meeting"
+                      </p>
+                      <button
+                        onClick={async () => {
+                          try {
+                            const response = await fetch('/api/health')
+                            const health = await response.json()
+                            console.log('🏥 Health Check:', health)
+                            addNotification({
+                              type: "inquiry",
+                              title: "Health Check",
+                              message: `AI Provider: ${health.ai_provider?.active || 'unknown'} (${health.ai_provider?.configured ? 'configured' : 'not configured'})`
+                            })
+                          } catch (error) {
+                            console.error('Health check failed:', error)
+                          }
+                        }}
+                        className="text-xs text-blue-500 hover:text-blue-700 underline"
+                      >
+                        Test AI
+                      </button>
+                    </div>
                   </div>
                 </TabsContent>
 

@@ -107,6 +107,8 @@ Conversation ID: ${conversation_id}`
 
     // Get the AI provider and generate response
     const provider = getAIProvider()
+    console.log(`🤖 AI Provider: ${provider.name}`)
+    console.log(`🔧 Environment AI_PROVIDER: ${process.env.AI_PROVIDER || 'default(openrouter)'}`)
     
     try {
       const result = await createStreamResponse(provider, messages, systemMessage)
@@ -169,17 +171,52 @@ Conversation ID: ${conversation_id}`
     } catch (providerError: any) {
       console.error(`AI Provider (${provider.name}) error:`, providerError)
       
-      // Return a user-friendly error message
-      return new Response(
-        JSON.stringify({ 
-          error: `AI service temporarily unavailable (${provider.name}). Please try again later.`,
-          details: providerError.message 
-        }), 
-        { 
-          status: 503,
-          headers: { 'Content-Type': 'application/json' }
+      // Return dummy response for testing when AI provider fails
+      console.log(`🔄 Returning dummy response for testing...`)
+      
+      const dummyResponse = `Test AI reply from ${provider.name} - This is a dummy response to test chat functionality. 
+
+Provider: ${provider.name}
+Timestamp: ${new Date().toISOString()}
+Last message: "${messages[messages.length - 1]?.content || 'No message'}"
+
+The AI provider encountered an error: ${providerError.message}
+
+This confirms that:
+✅ Frontend can send messages
+✅ Backend receives and processes them
+✅ Responses can be displayed in chat
+❌ AI provider needs configuration`
+
+      // Create a simple text stream for the dummy response
+      const stream = new ReadableStream({
+        start(controller) {
+          const words = dummyResponse.split(' ')
+          let index = 0
+          
+          const sendWord = () => {
+            if (index < words.length) {
+              controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ content: words[index] + ' ' })}\n\n`))
+              index++
+              setTimeout(sendWord, 50) // Simulate typing effect
+            } else {
+              controller.close()
+            }
+          }
+          
+          sendWord()
         }
-      )
+      })
+
+      return new Response(stream, {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+          'x-conversation-id': conversation_id,
+          'x-debug-mode': 'true'
+        }
+      })
     }
 
   } catch (error) {
