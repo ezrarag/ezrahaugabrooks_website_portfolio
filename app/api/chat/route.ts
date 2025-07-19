@@ -1,7 +1,7 @@
-import { streamText } from "ai"
-import { xai } from "@ai-sdk/xai"
-import { client } from "@/lib/sanity"
+
 import { supabase } from "@/lib/supabase"
+import { client } from "@/lib/sanity"
+import { getAIProvider, createStreamResponse } from "@/lib/ai-providers"
 import type { NextRequest } from "next/server"
 
 // System prompt that makes the AI act as Ezra's assistant
@@ -105,55 +105,83 @@ ${
 Current date: ${new Date().toLocaleDateString()}
 Conversation ID: ${conversation_id}`
 
-    const result = await streamText({
-      model: xai("grok-beta"),
-      system: systemMessage,
-      messages,
-      temperature: 0.7,
-      maxTokens: 1000,
-    })
+    // Get the AI provider and generate response
+    const provider = getAIProvider()
+    
+    try {
+      const result = await createStreamResponse(provider, messages, systemMessage)
 
-    // Store the conversation messages
-    const lastMessage = messages[messages.length - 1]
-    if (lastMessage) {
-      await supabase.from("chat_messages").insert({
-        conversation_id,
-        role: lastMessage.role,
-        content: lastMessage.content,
+      // Store the conversation messages
+      const lastMessage = messages[messages.length - 1]
+      if (lastMessage) {
+        await supabase.from("chat_messages").insert({
+          conversation_id,
+          role: lastMessage.role,
+          content: lastMessage.content,
+        })
+      }
+
+      // Analyze the conversation for special actions
+      const conversationText = messages
+        .map((m: any) => m.content)
+        .join(" ")
+        .toLowerCase()
+
+      const isAppointment =
+        conversationText.includes("meeting") ||
+        conversationText.includes("schedule") ||
+        conversationText.includes("appointment") ||
+        conversationText.includes("call") ||
+        conversationText.includes("zoom")
+
+      const isInquiry =
+        conversationText.includes("project") ||
+        conversationText.includes("work") ||
+        conversationText.includes("hire") ||
+        conversationText.includes("collaborate") ||
+        conversationText.includes("build") ||
+        conversationText.includes("develop")
+
+      const headers = new Headers()
+      headers.set("x-conversation-id", conversation_id)
+
+      if (isAppointment) {
+        headers.set("x-action-type", "appointment")
+      } else if (isInquiry) {
+        headers.set("x-action-type", "inquiry")
+      }
+
+      // For Grok provider (using streamText), return the DataStreamResponse
+      if (provider.name === 'grok') {
+        return result.toDataStreamResponse({ headers })
+      }
+
+      // For other providers, return the custom stream with headers
+      const response = new Response(result.body, {
+        headers: {
+          ...Object.fromEntries(result.headers),
+          ...Object.fromEntries(headers)
+        }
       })
+
+      return response
+
+    } catch (providerError: any) {
+      console.error(`AI Provider (${provider.name}) error:`, providerError)
+      
+      // Return a user-friendly error message
+      return new Response(
+        JSON.stringify({ 
+          error: `AI service temporarily unavailable (${provider.name}). Please try again later.`,
+          details: providerError.message 
+        }), 
+        { 
+          status: 503,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
     }
 
-    // Analyze the conversation for special actions
-    const conversationText = messages
-      .map((m: any) => m.content)
-      .join(" ")
-      .toLowerCase()
-
-    const isAppointment =
-      conversationText.includes("meeting") ||
-      conversationText.includes("schedule") ||
-      conversationText.includes("appointment") ||
-      conversationText.includes("call") ||
-      conversationText.includes("zoom")
-
-    const isInquiry =
-      conversationText.includes("project") ||
-      conversationText.includes("work") ||
-      conversationText.includes("hire") ||
-      conversationText.includes("collaborate") ||
-      conversationText.includes("build") ||
-      conversationText.includes("develop")
-
-    const headers = new Headers()
-    headers.set("x-conversation-id", conversation_id)
-
-    if (isAppointment) {
-      headers.set("x-action-type", "appointment")
-    } else if (isInquiry) {
-      headers.set("x-action-type", "inquiry")
-    }
-
-    return result.toDataStreamResponse({ headers })
   } catch (error) {
     console.error("Chat API error:", error)
     return new Response("Error processing chat request", { status: 500 })

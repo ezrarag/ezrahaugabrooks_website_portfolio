@@ -1,12 +1,20 @@
 
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { getChatConfig } from '@/lib/env-validation'
+import { getChatConfig, validateAIProvider } from '@/lib/env-validation'
 
 export async function GET() {
+  const config = getChatConfig()
+  const aiStatus = validateAIProvider()
+  
   const checks = {
-    environment: getChatConfig() ? 'configured' : 'missing_vars',
+    environment: config ? 'configured' : 'missing_vars',
     database: 'unknown',
+    ai_provider: {
+      active: aiStatus.provider,
+      configured: aiStatus.configured,
+      available: aiStatus.availableProviders
+    },
     timestamp: new Date().toISOString()
   }
 
@@ -18,7 +26,9 @@ export async function GET() {
     checks.database = 'unreachable'
   }
 
-  const isHealthy = checks.environment === 'configured' && checks.database === 'connected'
+  const isHealthy = checks.environment === 'configured' && 
+                   checks.database === 'connected' && 
+                   checks.ai_provider.configured
 
   return NextResponse.json(checks, { 
     status: isHealthy ? 200 : 503 
