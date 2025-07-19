@@ -3,6 +3,7 @@
 
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { ProfileSection } from "@/components/profile-section"
 import { ContactSection } from "@/components/contact-section"
@@ -176,8 +177,8 @@ export default function HomePage() {
       <Header />
 
       <main className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Column - Featured Project and Contact */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Left Column - Featured Project */}
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -192,15 +193,81 @@ export default function HomePage() {
                 <FeaturedProjectCarousel projects={featuredProjects} />
               )}
             </motion.div>
-
-            <ContactSection />
           </div>
 
-          {/* Right Column - Profile and Description */}
+          {/* Right Column - Profile Card */}
           <div className="space-y-8">
-            <ProfileSection />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="relative bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden h-64"
+            >
+              {/* Avatar Background with Gradient Overlay */}
+              <div className="absolute inset-0">
+                <img 
+                  src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200" 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent"></div>
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
+                <div>
+                  <motion.h2
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="text-xl font-bold mb-3"
+                  >
+                    Hi, I'm a creative technologist
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="text-sm leading-relaxed mb-4 text-gray-100"
+                  >
+                    Independent designer based in Atlanta, Georgia — blending minimal design with thoughtful interaction.
+                  </motion.p>
+                </div>
+
+                {/* Expertise Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="grid grid-cols-2 gap-2"
+                >
+                  <Link href="/developer" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                    Developer
+                  </Link>
+                  <Link href="/linguist" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                    Linguist
+                  </Link>
+                  <Link href="/music" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                    Musician
+                  </Link>
+                  <Link href="/educator" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                    Educator
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
+
+        {/* Contact Section - Below the two cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-12"
+        >
+          <ContactSection />
+        </motion.div>
       </main>
 
       {/* AI Chat Center replaces VideoPlayer */}
