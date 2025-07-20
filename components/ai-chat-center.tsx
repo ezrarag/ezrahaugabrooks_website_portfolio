@@ -21,7 +21,7 @@ import {
   CheckCircle,
   ImageIcon,
 } from "lucide-react"
-import { useChat } from "ai/react"
+import { useChat } from "@ai-sdk/react"
 import { toast } from "sonner"
 
 interface Notification {
@@ -41,28 +41,17 @@ export function AiChatCenter() {
   const [conversationId, setConversationId] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const currentContentRef = useRef("")
 
-  // AI Chat hook with Grok
+  // AI Chat hook
   const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
     api: "/api/chat",
     body: {
       conversationId,
     },
-    initialMessages: [
-      {
-        id: "welcome",
-        role: "assistant",
-        content: `Hello! I'm Ezra's AI assistant. I can help you with:
-
-• **Portfolio Discussion** - Ask about Ezra's work, skills, and projects
-• **Document Analysis** - Upload your resume for personalized feedback  
-• **Appointment Scheduling** - Set up meetings and consultations
-• **Project Inquiries** - Discuss potential collaborations
-
-What would you like to know about Ezra's work, or how can I assist you today?`,
-      },
-    ],
+    // No initialMessages: chat starts empty
     onResponse: (response) => {
+      console.log("🔍 onResponse called with:", response)
       // Get conversation ID from response headers
       const newConversationId = response.headers.get("x-conversation-id")
       if (newConversationId && !conversationId) {
@@ -72,6 +61,7 @@ What would you like to know about Ezra's work, or how can I assist you today?`,
       // Handle special AI responses
       const actionType = response.headers.get("x-action-type")
       if (actionType) {
+        console.log("🔍 Action type detected:", actionType)
         handleAiAction(actionType)
       }
 
@@ -84,6 +74,16 @@ What would you like to know about Ezra's work, or how can I assist you today?`,
           message: "Using dummy AI response for testing - check console for details"
         })
       }
+      // Removed manual stream reading logic
+    },
+    onFinish: (message) => {
+      // Finalize the message content
+      message.content = currentContentRef.current
+      currentContentRef.current = ""
+      console.log("🔍 onFinish called with message:", message)
+    },
+    onError: (error) => {
+      console.error("🔍 useChat error:", error)
     },
   })
 
@@ -153,11 +153,7 @@ What would you like to know about Ezra's work, or how can I assist you today?`,
       // Send the analysis to the chat
       await append({
         role: "assistant",
-        content: `I've analyzed your document "${file.name}". Here's my detailed feedback:
-
-${result.analysis}
-
-Would you like to discuss any specific aspects of this analysis, or do you have questions about how your background might align with potential projects?`,
+        content: `I've analyzed your document "${file.name}". Here's my detailed feedback:\n\n${result.analysis}\n\nWould you like to discuss any specific aspects of this analysis, or do you have questions about how your background might align with potential projects?`,
       })
 
       addNotification({
@@ -181,6 +177,15 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
 
   useEffect(() => {
     scrollToBottom()
+  }, [messages])
+
+  // Debug: Log messages state to see if AI responses are being added
+  useEffect(() => {
+    console.log("🔍 Current chat messages:", messages)
+    console.log("🔍 Messages count:", messages.length)
+    if (messages.length > 0) {
+      console.log("🔍 Last message:", messages[messages.length - 1])
+    }
   }, [messages])
 
   const unreadCount = notifications.filter((n) => !n.read).length
@@ -240,7 +245,7 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
               className="bg-white rounded-lg overflow-hidden max-w-4xl w-full max-h-[80vh] flex flex-col"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -289,6 +294,11 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
                 <TabsContent value="chat" className="flex-1 flex flex-col p-0">
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
+                    {messages.length === 0 && !isLoading && (
+                      <div className="text-center text-gray-400 py-8">
+                        <p>No messages yet. Start the conversation below.</p>
+                      </div>
+                    )}
                     {messages.map((message) => (
                       <div
                         key={message.id}
@@ -302,7 +312,13 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
                           <div className="flex items-start gap-2">
                             {message.role === "assistant" && <Bot className="w-4 h-4 mt-0.5 flex-shrink-0" />}
                             {message.role === "user" && <User className="w-4 h-4 mt-0.5 flex-shrink-0" />}
-                            <div className="whitespace-pre-wrap">{message.content}</div>
+                            <div className="whitespace-pre-wrap">
+                              {message.parts
+                                ? message.parts.map((part, i) =>
+                                    part.type === "text" ? <span key={i}>{part.text}</span> : null
+                                  )
+                                : message.content}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -475,4 +491,4 @@ Would you like to discuss any specific aspects of this analysis, or do you have 
       </AnimatePresence>
     </>
   )
-}
+} 

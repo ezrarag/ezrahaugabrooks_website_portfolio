@@ -153,72 +153,15 @@ Conversation ID: ${conversation_id}`
         headers.set("x-action-type", "inquiry")
       }
 
-      // For Grok provider (using streamText), return the DataStreamResponse
-      if (provider.name === 'grok') {
-        return result.toDataStreamResponse({ headers })
-      }
-
-      // For other providers, return the custom stream with headers
-      const response = new Response(result.body, {
-        headers: {
-          ...Object.fromEntries(result.headers),
-          ...Object.fromEntries(headers)
-        }
+      // Return the SDK-compatible stream for all providers
+      return result.toDataStreamResponse({
+        headers: Object.fromEntries(headers)
       })
-
-      return response
 
     } catch (providerError: any) {
       console.error(`AI Provider (${provider.name}) error:`, providerError)
-      
-      // Return dummy response for testing when AI provider fails
-      console.log(`🔄 Returning dummy response for testing...`)
-      
-      const dummyResponse = `Test AI reply from ${provider.name} - This is a dummy response to test chat functionality. 
-
-Provider: ${provider.name}
-Timestamp: ${new Date().toISOString()}
-Last message: "${messages[messages.length - 1]?.content || 'No message'}"
-
-The AI provider encountered an error: ${providerError.message}
-
-This confirms that:
-✅ Frontend can send messages
-✅ Backend receives and processes them
-✅ Responses can be displayed in chat
-❌ AI provider needs configuration`
-
-      // Create a simple text stream for the dummy response
-      const stream = new ReadableStream({
-        start(controller) {
-          const words = dummyResponse.split(' ')
-          let index = 0
-          
-          const sendWord = () => {
-            if (index < words.length) {
-              controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ content: words[index] + ' ' })}\n\n`))
-              index++
-              setTimeout(sendWord, 50) // Simulate typing effect
-            } else {
-              controller.close()
-            }
-          }
-          
-          sendWord()
-        }
-      })
-
-      return new Response(stream, {
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive',
-          'x-conversation-id': conversation_id,
-          'x-debug-mode': 'true'
-        }
-      })
+      return new Response("AI provider error", { status: 500 })
     }
-
   } catch (error) {
     console.error("Chat API error:", error)
     return new Response("Error processing chat request", { status: 500 })

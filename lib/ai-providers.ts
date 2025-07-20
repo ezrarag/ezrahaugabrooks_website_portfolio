@@ -1,4 +1,7 @@
 
+import { streamText } from "ai"
+import { openrouter } from "@openrouter/ai-sdk-provider"
+
 export interface AIProvider {
   name: string
   generateResponse(messages: any[], systemMessage: string): Promise<any>
@@ -18,7 +21,6 @@ export class GrokProvider implements AIProvider {
   
   async generateResponse(messages: any[], systemMessage: string) {
     // Import the existing xai integration
-    const { streamText } = await import("ai")
     const { xai } = await import("@ai-sdk/xai")
     
     if (!process.env.XAI_API_KEY) {
@@ -39,36 +41,14 @@ export class OpenRouterProvider implements AIProvider {
   name = 'openrouter'
   
   async generateResponse(messages: any[], systemMessage: string) {
-    const apiKey = process.env.OPENROUTER_API_KEY
-    if (!apiKey) {
-      throw new Error('OpenRouter provider not configured. Please add OPENROUTER_API_KEY environment variable.')
-    }
-
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-        'X-Title': 'Ezra AI Assistant'
-      },
-      body: JSON.stringify({
-        model: 'mistralai/mistral-7b-instruct',
-        messages: [
-          { role: 'system', content: systemMessage },
-          ...messages
-        ],
-        temperature: 0.7,
-        max_tokens: 1000,
-        stream: true
-      })
+    // Use the official OpenRouter provider for the Vercel AI SDK
+    return await streamText({
+      model: openrouter.chat('mistralai/mistral-7b-instruct'),
+      system: systemMessage,
+      messages,
+      temperature: 0.7,
+      maxTokens: 1000,
     })
-
-    if (!response.ok) {
-      throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`)
-    }
-
-    return response
   }
 }
 
@@ -142,113 +122,6 @@ export function getAIProvider(): AIProvider {
 export async function createStreamResponse(provider: AIProvider, messages: any[], systemMessage: string) {
   const providerName = provider.name
   
-  if (providerName === 'grok') {
-    // Use existing streamText for Grok
-    return await provider.generateResponse(messages, systemMessage)
-  }
-  
-  // For other providers, we need to create a custom stream
-  const response = await provider.generateResponse(messages, systemMessage)
-  
-  if (providerName === 'openrouter') {
-    return createOpenRouterStream(response)
-  }
-  
-  if (providerName === 'huggingface') {
-    return createHuggingFaceStream(response)
-  }
-  
-  throw new Error(`Unsupported provider for streaming: ${providerName}`)
-}
-
-async function createOpenRouterStream(response: Response) {
-  const reader = response.body?.getReader()
-  if (!reader) throw new Error('No response body')
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          
-          const chunk = new TextDecoder().decode(value)
-          const lines = chunk.split('\n').filter(line => line.trim())
-          
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6)
-              if (data === '[DONE]') continue
-              
-              try {
-                const parsed = JSON.parse(data)
-                const content = parsed.choices?.[0]?.delta?.content
-                if (content) {
-                  controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ content })}\n\n`))
-                }
-              } catch (e) {
-                // Skip invalid JSON
-              }
-            }
-          }
-        }
-      } finally {
-        controller.close()
-      }
-    }
-  })
-
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
-    }
-  })
-}
-
-async function createHuggingFaceStream(response: Response) {
-  const reader = response.body?.getReader()
-  if (!reader) throw new Error('No response body')
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        let buffer = ''
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          
-          buffer += new TextDecoder().decode(value)
-          const lines = buffer.split('\n')
-          buffer = lines.pop() || ''
-          
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6)
-              try {
-                const parsed = JSON.parse(data)
-                const content = parsed.generated_text || parsed.token?.text
-                if (content) {
-                  controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ content })}\n\n`))
-                }
-              } catch (e) {
-                // Skip invalid JSON
-              }
-            }
-          }
-        }
-      } finally {
-        controller.close()
-      }
-    }
-  })
-
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
-    }
-  })
+  // All providers now use streamText except Grok (which already does)
+  return await provider.generateResponse(messages, systemMessage)
 }

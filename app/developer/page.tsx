@@ -70,7 +70,7 @@ export default function DeveloperPage() {
 
   if (loading) {
     return (
-      <MinimalLayout title="work">
+      <MinimalLayout title="developer">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-white">Loading projects...</div>
         </div>
@@ -79,7 +79,7 @@ export default function DeveloperPage() {
   }
 
   return (
-    <MinimalLayout title="work">
+    <MinimalLayout title="developer">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {projects.map((project, index) => (
           <motion.div

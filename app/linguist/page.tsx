@@ -6,10 +6,18 @@ import { MinimalLayout } from "@/components/minimal-layout"
 import { MinimalProjectGrid } from "@/components/minimal-project-grid"
 import { portfolioHelpers, type LinguistProject } from "@/lib/supabase"
 import type { Project } from "@/components/minimal-project-grid"
+import { NeonCellModal } from "@/components/NeonCellModal"
 
 export default function LinguistPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalEntry, setModalEntry] = useState<null | {
+    id: string
+    title: string
+    linguistRoot: string
+    branches: { id: string; title: string; content: string }[]
+  }>(null)
 
   useEffect(() => {
     async function fetchProjects() {
@@ -74,13 +82,29 @@ export default function LinguistPage() {
   }
 
   const handleOpen = (project: Project) => {
-    // Handle project opening logic here
-    console.log("Opening project:", project)
+    // For now, use dummy data for the modal entry
+    setModalEntry({
+      id: project.id,
+      title: project.title,
+      linguistRoot: `Root linguist info for ${project.title}.`,
+      branches: [
+        { id: "b1", title: "Branch 1", content: `Branch 1 content for ${project.title}` },
+        { id: "b2", title: "Branch 2", content: `Branch 2 content for ${project.title}` },
+      ],
+    })
+    setModalOpen(true)
   }
 
   return (
     <MinimalLayout title="language">
       <MinimalProjectGrid projects={projects} onOpen={handleOpen} />
+      {modalEntry && (
+        <NeonCellModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          entry={modalEntry}
+        />
+      )}
     </MinimalLayout>
   )
 }
