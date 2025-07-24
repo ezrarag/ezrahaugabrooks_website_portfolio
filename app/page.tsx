@@ -162,22 +162,30 @@ export default function HomePage() {
         setFeaturedProjects(projects || [])
       } catch (error) {
         console.error("Error fetching featured projects:", error)
-        // Fallback to empty array - component will show "No featured projects" message
         setFeaturedProjects([])
       } finally {
         setLoading(false)
       }
     }
-
     fetchFeaturedProjects()
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
-      <Header />
-
-      <main className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <div className="min-h-screen bg-gray-50 text-white relative overflow-hidden">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-0">
+        <img
+          src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200"
+          alt="Background"
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent" />
+      </div>
+      <div className="text-white">
+        <Header />
+      </div>
+      <main className="container mx-auto px-6 py-12 relative z-10 flex min-h-screen items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full">
           {/* Left Column - Featured Project */}
           <div className="space-y-8">
             <motion.div
@@ -186,11 +194,13 @@ export default function HomePage() {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               {loading ? (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 h-64 flex items-center justify-center">
-                  <p className="text-gray-500">Loading featured project...</p>
+                <div className="bg-white/20 backdrop-blur-lg rounded-lg shadow-sm border border-white/20 p-6 h-64 flex items-center justify-center glass-card text-white">
+                  <p className="text-white">Loading featured project...</p>
                 </div>
               ) : (
-                <FeaturedProjectCarousel projects={featuredProjects} />
+                <div className="glass-card bg-white/20 backdrop-blur-lg rounded-lg shadow-sm border border-white/20 text-white">
+                  <FeaturedProjectCarousel projects={featuredProjects} />
+                </div>
               )}
             </motion.div>
           </div>
@@ -201,20 +211,10 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-              className="relative bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden h-64"
+              className="relative bg-white/20 backdrop-blur-lg rounded-lg shadow-sm border border-white/20 overflow-hidden h-64"
             >
-              {/* Avatar Background with Gradient Overlay */}
-              <div className="absolute inset-0">
-                <img 
-                  src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200" 
-                  alt="Profile" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent"></div>
-              </div>
-
               {/* Content */}
-              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
+              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-black">
                 <div>
                   <motion.h2
                     initial={{ opacity: 0, x: -20 }}
@@ -228,7 +228,7 @@ export default function HomePage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.6 }}
-                    className="text-sm leading-relaxed mb-4 text-gray-100"
+                    className="text-sm leading-relaxed mb-4 text-gray-700"
                   >
                     Independent designer based in Atlanta, Georgia — blending minimal design with thoughtful interaction.
                   </motion.p>
@@ -241,16 +241,16 @@ export default function HomePage() {
                   transition={{ duration: 0.6, delay: 0.8 }}
                   className="grid grid-cols-2 gap-2"
                 >
-                  <Link href="/developer" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                  <Link href="/developer" className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-black hover:bg-white/80 transition-colors text-center">
                     Developer
                   </Link>
-                  <Link href="/linguist" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                  <Link href="/linguist" className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-black hover:bg-white/80 transition-colors text-center">
                     Linguist
                   </Link>
-                  <Link href="/music" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                  <Link href="/music" className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-black hover:bg-white/80 transition-colors text-center">
                     Musician
                   </Link>
-                  <Link href="/educator" className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-white hover:bg-white/30 transition-colors text-center">
+                  <Link href="/educator" className="bg-white/60 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-xs font-medium text-black hover:bg-white/80 transition-colors text-center">
                     Educator
                   </Link>
                 </motion.div>
@@ -259,14 +259,22 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Contact Section - Below the two cards */}
+        {/* Contact Section - fixed to bottom left, parallel to chat icon */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-12"
+          className="fixed bottom-6 left-6 z-50 flex flex-col items-start"
         >
-          <ContactSection />
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 group cursor-pointer" tabIndex={0}>
+              <span className="text-lg font-medium">info@עזרה.online</span>
+              <div className="p-1 hover:bg-gray-100 rounded transition-colors" tabIndex={0}>
+                {/* Copy icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copy w-4 h-4 text-gray-600"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </main>
 

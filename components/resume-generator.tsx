@@ -203,7 +203,7 @@ export function ResumeGenerator({ onClose }: ResumeGeneratorProps) {
           exit={{ scale: 0.8, opacity: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className="bg-white rounded-lg overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">

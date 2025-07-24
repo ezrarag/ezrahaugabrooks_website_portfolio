@@ -1,14 +1,19 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, FileText, User, Menu } from "lucide-react"
 import Link from "next/link"
+import { DownloadModal } from "@/components/download-modal"
 
 export function Header() {
+  const [showDownloadModal, setShowDownloadModal] = useState(false)
+  const [downloadType, setDownloadType] = useState<"resume" | "cv">("resume")
+
   const handleDownloadResume = (type: "resume" | "cv") => {
-    console.log(`Downloading ${type}...`)
-    alert(`${type.toUpperCase()} download will be implemented with backend integration`)
+    setDownloadType(type)
+    setShowDownloadModal(true)
   }
 
   return (
@@ -23,7 +28,7 @@ export function Header() {
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="text-2xl font-bold"
+            className="text-2xl font-bold text-white"
             style={{ direction: "rtl" }}
           >
             עזרה
@@ -74,7 +79,19 @@ export function Header() {
                 whileTap={{ scale: 0.9 }}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <MoreHorizontal className="w-5 h-5" />
+                <motion.span
+                  animate={{ rotate: [0, -20, 20, -10, 0] }}
+                  transition={{
+                    times: [0, 0.15, 0.3, 0.45, 1],
+                    duration: 0.6,
+                    repeat: Infinity,
+                    repeatDelay: 44,
+                    ease: "easeInOut"
+                  }}
+                  style={{ display: 'inline-block' }}
+                >
+                  <MoreHorizontal className="w-5 h-5 text-white" />
+                </motion.span>
               </motion.button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200">
@@ -90,6 +107,13 @@ export function Header() {
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Download Modal */}
+      <DownloadModal
+        isOpen={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+        type={downloadType}
+      />
     </motion.header>
   )
 }

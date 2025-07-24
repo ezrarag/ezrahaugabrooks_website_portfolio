@@ -3,7 +3,18 @@ import { supabase } from "@/lib/supabase"
 
 export async function POST(request: NextRequest) {
   try {
-    const { conversationId, visitorName, visitorEmail, requestedDate, message } = await request.json()
+    const { 
+      conversationId, 
+      visitorName, 
+      visitorEmail, 
+      requestedDate, 
+      requestedTime,
+      topic,
+      duration,
+      message,
+      requiresDeposit,
+      depositAmount
+    } = await request.json()
 
     const { data: appointment, error } = await supabase
       .from("appointment_requests")
@@ -12,7 +23,12 @@ export async function POST(request: NextRequest) {
         visitor_name: visitorName,
         visitor_email: visitorEmail,
         requested_date: requestedDate,
+        requested_time: requestedTime,
+        topic: topic,
+        duration: duration,
         message: message,
+        requires_deposit: requiresDeposit,
+        deposit_amount: depositAmount,
         status: "pending",
       })
       .select()

@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import { useChat } from "@ai-sdk/react"
 import { toast } from "sonner"
+import { SchedulingForm } from "@/components/scheduling-form"
 
 interface Notification {
   id: string
@@ -457,19 +458,16 @@ export function AiChatCenter() {
 
                 {/* Appointments Tab */}
                 <TabsContent value="appointments" className="flex-1 p-4">
-                  <div className="text-center text-gray-500 py-8">
-                    <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Schedule meetings through chat</p>
-                    <p className="text-sm">Ask the AI assistant to help you set up an appointment with Ezra</p>
-                    <Button
-                      className="mt-4"
-                      onClick={() => {
-                        setActiveTab("chat")
-                      }}
-                    >
-                      Start Scheduling
-                    </Button>
-                  </div>
+                  <SchedulingForm 
+                    conversationId={conversationId || undefined}
+                    onScheduleComplete={() => {
+                      addNotification({
+                        type: "appointment",
+                        title: "Appointment Scheduled",
+                        message: "Your meeting with Ezra has been confirmed"
+                      })
+                    }}
+                  />
                 </TabsContent>
 
                 {/* Media Tab */}
