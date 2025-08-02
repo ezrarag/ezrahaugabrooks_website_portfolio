@@ -181,7 +181,7 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent" />
       </div>
-      <div className="text-white">
+      <div className="text-white relative z-[60]">
         <Header />
       </div>
       <main className="container mx-auto px-6 py-12 relative z-10 flex min-h-screen items-center justify-center">

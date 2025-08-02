@@ -21,7 +21,7 @@ export function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="container mx-auto px-6 py-6"
+      className="container mx-auto px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm"
     >
       <div className="flex items-center justify-between">
         <Link href="/">
