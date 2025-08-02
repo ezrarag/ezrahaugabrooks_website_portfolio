@@ -42,9 +42,9 @@ export function Header() {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-white/20 rounded-full transition-colors"
               >
-                <Menu className="w-5 h-5" />
+                <Menu className="w-5 h-5 text-white" />
               </motion.button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200">
@@ -77,7 +77,7 @@ export function Header() {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-white/20 rounded-full transition-colors"
               >
                 <motion.span
                   animate={{ rotate: [0, -20, 20, -10, 0] }}

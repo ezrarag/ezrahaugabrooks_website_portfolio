@@ -211,7 +211,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-              className="relative bg-white/20 backdrop-blur-lg rounded-lg shadow-sm border border-white/20 overflow-hidden h-64"
+              className="relative glass-card bg-white/20 backdrop-blur-lg rounded-lg shadow-sm border border-white/20 overflow-hidden h-64"
             >
               {/* Content */}
               <div className="relative z-10 p-6 h-full flex flex-col justify-between text-black">
