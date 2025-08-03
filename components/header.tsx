@@ -48,24 +48,26 @@ export function Header() {
                 <Menu className="w-5 h-5 text-white" />
               </motion.button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200 z-[70]">
-              <DropdownMenuItem asChild>
-                <Link href="/developer" className="cursor-pointer">
+            <DropdownMenuContent align="end" className="w-48 bg-white/20 backdrop-blur-sm border border-white/20 z-[70]">
+              <DropdownMenuItem asChild disabled>
+                <Link href="#" className="cursor-not-allowed text-white/50 hover:text-white/50">
                   Developer
+                  <span className="ml-auto text-xs text-white/30">Coming Soon</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/linguist" className="cursor-pointer">
+              <DropdownMenuItem asChild disabled>
+                <Link href="#" className="cursor-not-allowed text-white/50 hover:text-white/50">
                   Linguist
+                  <span className="ml-auto text-xs text-white/30">Coming Soon</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/music" className="cursor-pointer">
+                <Link href="/music" className="cursor-pointer text-white hover:text-white">
                   Music
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/educator" className="cursor-pointer">
+                <Link href="/educator" className="cursor-pointer text-white hover:text-white">
                   Educator
                 </Link>
               </DropdownMenuItem>
@@ -95,12 +97,12 @@ export function Header() {
                 </motion.span>
               </motion.button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200 z-[70]">
-              <DropdownMenuItem onClick={() => handleDownloadResume("resume")} className="cursor-pointer">
+            <DropdownMenuContent align="end" className="w-48 bg-white/20 backdrop-blur-sm border border-white/20 z-[70]">
+              <DropdownMenuItem onClick={() => handleDownloadResume("resume")} className="cursor-pointer text-white hover:text-white">
                 <FileText className="w-4 h-4 mr-2" />
                 Download Resume
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDownloadResume("cv")} className="cursor-pointer">
+              <DropdownMenuItem onClick={() => handleDownloadResume("cv")} className="cursor-pointer text-white hover:text-white">
                 <User className="w-4 h-4 mr-2" />
                 Download CV
               </DropdownMenuItem>
