@@ -10,6 +10,7 @@ import { DownloadModal } from "@/components/download-modal"
 export function Header() {
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [downloadType, setDownloadType] = useState<"resume" | "cv">("resume")
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   const handleDownloadResume = (type: "resume" | "cv") => {
     setDownloadType(type)
@@ -23,7 +24,7 @@ export function Header() {
       transition={{ duration: 0.6 }}
       className="w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm"
     >
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="w-full flex items-center justify-between px-6">
         <Link href="/">
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -37,7 +38,7 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           {/* Navigation Menu */}
-          <DropdownMenu>
+          <DropdownMenu open={openDropdown === "nav"} onOpenChange={(open) => setOpenDropdown(open ? "nav" : null)}>
             <DropdownMenuTrigger asChild>
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -72,7 +73,7 @@ export function Header() {
           </DropdownMenu>
 
           {/* Resume/CV Dropdown */}
-          <DropdownMenu>
+          <DropdownMenu open={openDropdown === "resume"} onOpenChange={(open) => setOpenDropdown(open ? "resume" : null)}>
             <DropdownMenuTrigger asChild>
               <motion.button
                 whileHover={{ scale: 1.1 }}

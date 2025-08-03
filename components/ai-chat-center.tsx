@@ -245,25 +245,25 @@ export function AiChatCenter() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="bg-white rounded-lg overflow-hidden max-w-4xl w-full max-h-[80vh] flex flex-col"
+              className="bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden max-w-4xl w-full max-h-[80vh] flex flex-col shadow-lg"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between p-4 border-b border-white/20 bg-black/20 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center">
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Ezra's AI Assistant</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="font-semibold text-white">Ezra's AI Assistant</h3>
+                    <p className="text-sm text-white/70">
                       {conversationId ? `Connected • ID: ${conversationId.slice(0, 8)}...` : "Connecting..."}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-white/70 hover:text-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -271,21 +271,21 @@ export function AiChatCenter() {
 
               {/* Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-                <TabsList className="grid w-full grid-cols-4 bg-gray-50">
-                  <TabsTrigger value="chat" className="flex items-center gap-2">
+                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm border-b border-white/20">
+                  <TabsTrigger value="chat" className="flex items-center gap-2 text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">
                     <MessageCircle className="w-4 h-4" />
                     Chat
                   </TabsTrigger>
-                  <TabsTrigger value="notifications" className="flex items-center gap-2">
+                  <TabsTrigger value="notifications" className="flex items-center gap-2 text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">
                     <Bell className="w-4 h-4" />
                     Activity
                     {unreadCount > 0 && <Badge className="bg-red-500 text-white text-xs">{unreadCount}</Badge>}
                   </TabsTrigger>
-                  <TabsTrigger value="appointments" className="flex items-center gap-2">
+                  <TabsTrigger value="appointments" className="flex items-center gap-2 text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">
                     <Calendar className="w-4 h-4" />
                     Schedule
                   </TabsTrigger>
-                  <TabsTrigger value="media" className="flex items-center gap-2">
+                  <TabsTrigger value="media" className="flex items-center gap-2 text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">
                     <ImageIcon className="w-4 h-4" />
                     Media
                   </TabsTrigger>

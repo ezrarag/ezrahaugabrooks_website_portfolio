@@ -13,7 +13,7 @@ export default function HomePage() {
         <img
           src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200"
           alt="Background"
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent" />
       </div>
