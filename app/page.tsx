@@ -1,22 +1,81 @@
 
 "use client"
 
+import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { Header } from "@/components/header"
 import { AiChatCenter } from "@/components/ai-chat-center"
+import { Play, Square } from "lucide-react"
 
 export default function HomePage() {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [showVideo, setShowVideo] = useState(false)
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      // Stop video and show image
+      if (videoRef.current) {
+        videoRef.current.pause()
+        videoRef.current.currentTime = 0
+      }
+      setIsPlaying(false)
+      setShowVideo(false)
+    } else {
+      // Start video
+      setIsPlaying(true)
+      setShowVideo(true)
+      if (videoRef.current) {
+        videoRef.current.play()
+      }
+    }
+  }
+
+  const handleVideoEnded = () => {
+    setIsPlaying(false)
+    setShowVideo(false)
+  }
+
   return (
     <div className="h-screen bg-gray-50 text-white relative overflow-hidden landing-page">
-      {/* Background Image */}
+      {/* Background Image/Video */}
       <div className="fixed inset-0 z-0">
-        <img
-          src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200"
-          alt="Background"
-          className="w-full h-full object-cover object-center scale-110"
-        />
+        {showVideo ? (
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover object-center"
+            onEnded={handleVideoEnded}
+            muted
+          >
+            <source src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/background-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <img
+            src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/avatars//IMG_7871.jpeg?height=200&width=200"
+            alt="Background"
+            className="w-full h-full object-cover object-center scale-110"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent" />
       </div>
+
+      {/* Play/Stop Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        onClick={handlePlayPause}
+        className="fixed top-1/2 right-6 transform -translate-y-1/2 z-40 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-4 hover:bg-white/30 transition-all duration-300 group"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {isPlaying ? (
+          <Square className="w-6 h-6 text-white" />
+        ) : (
+          <Play className="w-6 h-6 text-white ml-1" />
+        )}
+      </motion.button>
       
       <div className="text-white relative z-[60]">
         <Header />

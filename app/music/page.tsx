@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import type { Project } from "@/components/minimal-project-grid"
 import { FileUploader } from "@/components/FileUploader"
 import { portfolioHelpers, type MusicProject } from "@/lib/supabase"
+import { MusicServiceModal } from "@/components/music-service-modal"
 
 export default function MusicPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -16,6 +17,7 @@ export default function MusicPage() {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [showMusicServices, setShowMusicServices] = useState(false)
+  const [selectedService, setSelectedService] = useState<{ name: string; description: string } | null>(null)
 
   const musicServices = [
     { name: "Compose", description: "Original compositions and arrangements" },
@@ -172,7 +174,10 @@ export default function MusicPage() {
   }
 
   const handleServiceSelect = (service: string) => {
-    setActiveRole(service)
+    const selectedServiceData = musicServices.find(s => s.name === service)
+    if (selectedServiceData) {
+      setSelectedService(selectedServiceData)
+    }
   }
 
   return (
@@ -192,6 +197,15 @@ export default function MusicPage() {
 
       {selectedProject && (
         <LightboxModal project={selectedProject} onClose={handleClose} />
+      )}
+
+      {selectedService && (
+        <MusicServiceModal
+          service={selectedService.name}
+          description={selectedService.description}
+          isOpen={!!selectedService}
+          onClose={() => setSelectedService(null)}
+        />
       )}
 
       {/* Role Modal */}
