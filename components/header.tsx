@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreHorizontal, FileText, User, Menu, Play, Square, User as UserIcon } from "lucide-react"
 import Link from "next/link"
 import { DownloadModal } from "@/components/download-modal"
-import { Dashboard } from "@/components/dashboard"
+import { DashboardContent } from "@/components/dashboard-content"
 
 interface HeaderProps {
   isPlaying?: boolean
@@ -41,8 +41,8 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm ${
-        isHeaderExpanded ? 'min-h-[400px]' : ''
+      className={`w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm transition-all duration-500 ${
+        isHeaderExpanded ? 'min-h-[600px]' : ''
       }`}
     >
       <div className="w-full flex items-center justify-between px-6">
@@ -179,7 +179,7 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
           transition={{ duration: 0.3 }}
           className="w-full px-6 pb-6"
         >
-          <Dashboard isOpen={showDashboard} onClose={handleDashboardClose} />
+          <DashboardContent onClose={handleDashboardClose} />
         </motion.div>
       )}
     </motion.header>
