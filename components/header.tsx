@@ -21,9 +21,9 @@ export function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="container mx-auto px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm"
+      className="w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm"
     >
-      <div className="flex items-center justify-between">
+      <div className="container mx-auto flex items-center justify-between">
         <Link href="/">
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -47,7 +47,7 @@ export function Header() {
                 <Menu className="w-5 h-5 text-white" />
               </motion.button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200">
+            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200 z-[70]">
               <DropdownMenuItem asChild>
                 <Link href="/developer" className="cursor-pointer">
                   Developer
@@ -94,7 +94,7 @@ export function Header() {
                 </motion.span>
               </motion.button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200">
+            <DropdownMenuContent align="end" className="w-48 bg-white border border-gray-200 z-[70]">
               <DropdownMenuItem onClick={() => handleDownloadResume("resume")} className="cursor-pointer">
                 <FileText className="w-4 h-4 mr-2" />
                 Download Resume
