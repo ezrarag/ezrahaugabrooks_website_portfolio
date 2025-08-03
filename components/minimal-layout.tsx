@@ -23,9 +23,11 @@ export type DropdownSection = {
 type MinimalLayoutProps = {
   title: string
   children: ReactNode
+  musicServices?: { name: string; description: string }[]
+  onServiceSelect?: (service: string) => void
 }
 
-export function MinimalLayout({ title, children }: MinimalLayoutProps) {
+export function MinimalLayout({ title, children, musicServices, onServiceSelect }: MinimalLayoutProps) {
   const [showResumeGenerator, setShowResumeGenerator] = useState(false)
 
   // Use DropdownSection[] for type safety
@@ -51,6 +53,18 @@ export function MinimalLayout({ title, children }: MinimalLayoutProps) {
       ],
     },
   ]
+
+  // Add music services dropdown if provided
+  if (musicServices && onServiceSelect) {
+    dropdownSections.unshift({
+      title: "Music Services",
+      items: musicServices.map(service => ({
+        icon: "🎵",
+        label: service.name,
+        onClick: () => onServiceSelect(service.name),
+      }))
+    })
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">

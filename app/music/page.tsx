@@ -15,10 +15,16 @@ export default function MusicPage() {
   const [activeRole, setActiveRole] = useState<string | null>(null)
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [showMusicServices, setShowMusicServices] = useState(false)
 
-  const roles = [
-    "Compose", "Mix/Master", "Track a Project",
-    "Conduct", "Sing", "Accompany (Piano)", "Section Viola"
+  const musicServices = [
+    { name: "Compose", description: "Original compositions and arrangements" },
+    { name: "Mix/Master", description: "Audio production and mastering" },
+    { name: "Track a Project", description: "Instrumental recording sessions" },
+    { name: "Conduct", description: "Orchestral and ensemble conducting" },
+    { name: "Sing", description: "Vocal performances and features" },
+    { name: "Accompany (Piano)", description: "Piano accompaniment services" },
+    { name: "Section Viola", description: "Orchestral viola performances" }
   ]
 
   useEffect(() => {
@@ -165,8 +171,16 @@ export default function MusicPage() {
     )
   }
 
+  const handleServiceSelect = (service: string) => {
+    setActiveRole(service)
+  }
+
   return (
-    <MinimalLayout title="music">
+    <MinimalLayout 
+      title="music" 
+      musicServices={musicServices}
+      onServiceSelect={handleServiceSelect}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -179,40 +193,6 @@ export default function MusicPage() {
       {selectedProject && (
         <LightboxModal project={selectedProject} onClose={handleClose} />
       )}
-
-      {/* Upload Section (removed as per request) */}
-      {/* <div className="mt-12">
-        <h2 className="text-xl font-semibold mb-4 text-white">Upload Your Music Stems</h2>
-        <button
-          onClick={() => setShowUploader(true)}
-          className="bg-white text-black rounded px-4 py-2"
-        >
-          Upload Stems
-        </button>
-
-        {showUploader && (
-          <FileUploader
-            category="music"
-            onClose={() => setShowUploader(false)}
-          />
-        )}
-      </div> */}
-
-      {/* Role Selection Section */}
-      <div className="mt-12">
-        <h2 className="text-xl font-semibold mb-4 text-white">Explore Music Services</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {roles.map((role) => (
-            <button
-              key={role}
-              onClick={() => setActiveRole(role)}
-              className="bg-zinc-800 rounded-xl p-4 text-white hover:bg-zinc-700 transition text-center"
-            >
-              {role}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Role Modal */}
       {activeRole && (

@@ -13,7 +13,9 @@ import { Loader2, CreditCard, CheckCircle } from "lucide-react"
 import { toast } from "sonner"
 
 // Load Stripe outside of component to avoid recreating on every render
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
 
 interface PaymentFormProps {
   amount: number
@@ -152,6 +154,17 @@ function PaymentFormContent({ amount, appointmentData, onSuccess, onCancel }: Pa
 
 export function PaymentForm(props: PaymentFormProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+
+  // Check if Stripe is configured
+  if (!stripePromise) {
+    return (
+      <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
+        <p className="text-yellow-200 text-sm">
+          ⚠️ Stripe is not configured. Please set up your Stripe environment variables.
+        </p>
+      </div>
+    )
+  }
 
   useEffect(() => {
     // Create payment intent when component mounts

@@ -7,7 +7,7 @@ import { AiChatCenter } from "@/components/ai-chat-center"
 
 export default function HomePage() {
   return (
-    <div className="h-screen bg-gray-50 text-white relative overflow-hidden">
+    <div className="h-screen bg-gray-50 text-white relative overflow-hidden landing-page">
       {/* Background Image */}
       <div className="fixed inset-0 z-0">
         <img
