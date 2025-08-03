@@ -384,18 +384,19 @@ export function SchedulingForm({ conversationId, onScheduleComplete }: Schedulin
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Your Name *
                 </label>
                 <Input
                   value={visitorName}
                   onChange={(e) => setVisitorName(e.target.value)}
                   placeholder="Enter your full name"
+                  className="bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Email Address *
                 </label>
                 <Input
@@ -403,11 +404,12 @@ export function SchedulingForm({ conversationId, onScheduleComplete }: Schedulin
                   value={visitorEmail}
                   onChange={(e) => setVisitorEmail(e.target.value)}
                   placeholder="Enter your email address"
+                  className="bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Additional Message
                 </label>
                 <Textarea
@@ -415,6 +417,7 @@ export function SchedulingForm({ conversationId, onScheduleComplete }: Schedulin
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell us about your project or any specific topics you'd like to discuss..."
                   rows={3}
+                  className="bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/50"
                 />
               </div>
             </div>

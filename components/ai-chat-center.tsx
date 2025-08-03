@@ -296,7 +296,7 @@ export function AiChatCenter() {
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
                     {messages.length === 0 && !isLoading && (
-                      <div className="text-center text-gray-400 py-8">
+                      <div className="text-center text-white/70 py-8">
                         <p>No messages yet. Start the conversation below.</p>
                       </div>
                     )}
@@ -307,7 +307,7 @@ export function AiChatCenter() {
                       >
                         <div
                           className={`max-w-[80%] rounded-lg p-3 ${
-                            message.role === "user" ? "bg-black text-white" : "bg-gray-100 text-gray-900"
+                            message.role === "user" ? "bg-black text-white" : "bg-white/20 backdrop-blur-sm text-white border border-white/20"
                           }`}
                         >
                           <div className="flex items-start gap-2">
@@ -326,11 +326,11 @@ export function AiChatCenter() {
                     ))}
                     {isLoading && (
                       <div className="flex justify-start">
-                        <div className="bg-gray-100 rounded-lg p-3">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 border border-white/20">
                           <div className="flex items-center gap-2">
-                            <Bot className="w-4 h-4" />
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span className="text-sm text-gray-600">Thinking...</span>
+                            <Bot className="w-4 h-4 text-white" />
+                            <Loader2 className="w-4 h-4 animate-spin text-white" />
+                            <span className="text-sm text-white">Thinking...</span>
                           </div>
                         </div>
                       </div>
@@ -339,7 +339,7 @@ export function AiChatCenter() {
                   </div>
 
                   {/* Input */}
-                  <div className="border-t border-gray-200 p-4">
+                  <div className="border-t border-white/20 p-4">
                     <form onSubmit={handleSubmit} className="flex gap-2">
                       <div className="flex-1 relative">
                         <Input
@@ -352,7 +352,7 @@ export function AiChatCenter() {
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
                           disabled={isUploading}
                         >
                           {isUploading ? (
@@ -376,7 +376,7 @@ export function AiChatCenter() {
                     />
 
                     <div className="flex items-center justify-between mt-2">
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-white/70">
                         💡 Try: "Tell me about Ezra's development work" or "I'd like to schedule a meeting"
                       </p>
                       <button
@@ -394,7 +394,7 @@ export function AiChatCenter() {
                             console.error('Health check failed:', error)
                           }
                         }}
-                        className="text-xs text-blue-500 hover:text-blue-700 underline"
+                        className="text-xs text-blue-300 hover:text-blue-200 underline"
                       >
                         Test AI
                       </button>
@@ -406,14 +406,14 @@ export function AiChatCenter() {
                 <TabsContent value="notifications" className="flex-1 p-4">
                   <div className="space-y-3">
                     {notifications.length === 0 ? (
-                      <div className="text-center text-gray-500 py-8">
-                        <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <div className="text-center text-white/70 py-8">
+                        <Bell className="w-8 h-8 mx-auto mb-2 opacity-50 text-white" />
                         <p>No activity yet</p>
                         <p className="text-sm">Start a conversation to see updates here</p>
                       </div>
                     ) : (
                       notifications.map((notification) => (
-                        <Card key={notification.id} className={`${!notification.read ? "border-blue-500" : ""}`}>
+                        <Card key={notification.id} className={`bg-white/10 backdrop-blur-sm border border-white/20 ${!notification.read ? "border-blue-500" : ""}`}>
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
@@ -421,19 +421,19 @@ export function AiChatCenter() {
                                   <Badge
                                     className={
                                       notification.type === "appointment"
-                                        ? "bg-green-100 text-green-800"
+                                        ? "bg-green-200/20 text-green-200"
                                         : notification.type === "inquiry"
-                                          ? "bg-blue-100 text-blue-800"
-                                          : "bg-purple-100 text-purple-800"
+                                          ? "bg-blue-200/20 text-blue-200"
+                                          : "bg-purple-200/20 text-purple-200"
                                     }
                                   >
                                     {notification.type}
                                   </Badge>
-                                  {!notification.read && <div className="w-2 h-2 bg-blue-500 rounded-full" />}
+                                  {!notification.read && <div className="w-2 h-2 bg-blue-400 rounded-full" />}
                                 </div>
-                                <h4 className="font-semibold">{notification.title}</h4>
-                                <p className="text-sm text-gray-600">{notification.message}</p>
-                                <p className="text-xs text-gray-400 mt-1">{notification.timestamp.toLocaleString()}</p>
+                                <h4 className="font-semibold text-white">{notification.title}</h4>
+                                <p className="text-sm text-white/80">{notification.message}</p>
+                                <p className="text-xs text-white/60 mt-1">{notification.timestamp.toLocaleString()}</p>
                               </div>
                               {!notification.read && (
                                 <Button
