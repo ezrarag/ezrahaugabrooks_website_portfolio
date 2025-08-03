@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-12-18.acacia",
-})
+// Initialize Stripe only when needed to avoid build-time issues
+function getStripe() {
+  const secretKey = process.env.STRIPE_SECRET_KEY
+  if (!secretKey) {
+    throw new Error("STRIPE_SECRET_KEY is not configured")
+  }
+  return new Stripe(secretKey, {
+    apiVersion: "2024-12-18.acacia",
+  })
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,6 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Retrieve the payment intent to check its status
+    const stripe = getStripe()
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
 
     if (paymentIntent.status === "succeeded") {
