@@ -1,6 +1,6 @@
 # TODO
 
-## Completed
+## Completed ✅
 - [x] Glassmorphism (frosted glass) effect for both homepage cards
 - [x] White header, animated dots, and logo for visibility
 - [x] Vertically and horizontally centered cards
@@ -8,21 +8,35 @@
 - [x] Subcategory filtering for resume/CV download modal
 - [x] Pendulum animation for three dots menu
 - [x] Schedule form integration with Supabase
+- [x] Music page scrolling and header behavior
+- [x] Music services dropdown menu with Framer Motion animations
+- [x] Music service modal with document upload and payment
+- [x] Play/stop button for background video (moved to header)
+- [x] Stripe payment integration for music services
+- [x] AI chat integration with conversation storage
+- [x] Header visibility and z-index fixes
+- [x] Landing page viewport height only (no scrolling)
+- [x] Disabled Developer/Linguist pages with consistent styling
 
-## In Progress / Next Steps
-- [ ] AI integration for document generation (fix model error, connect to Supabase for real data)
-- [ ] Backend: update `/api/generate-document` to use subcategories and query real data from Supabase
-- [ ] Testing and polish (UI/UX, error handling, edge cases)
+## In Progress / Next Steps 🔄
+- [ ] **AI Chat Debugging**: Fix chat response issues (add environment variables)
+- [ ] **Stripe Webhook Setup**: Add webhook for production payment handling
+- [ ] **Environment Variables**: Set up XAI_API_KEY and Stripe keys for Vercel deployment
+- [ ] **File Upload**: Implement actual file upload to Supabase storage
+- [ ] **Video Background**: Add actual background video file to Supabase storage
 
-## Optional / Future
+## Optional / Future 🚀
 - [ ] Dynamic subcategory loading from Supabase (instead of hardcoded)
 - [ ] Add preview step before download (show generated doc before saving)
 - [ ] Add payment processing for scheduling (Stripe, PayPal, etc.)
+- [ ] AI integration for document generation (fix model error, connect to Supabase for real data)
+- [ ] Backend: update `/api/generate-document` to use subcategories and query real data from Supabase
 
 ---
 
 **Notes:**
-- All homepage UI polish and glassmorphism complete. Next: focus on AI/Supabase integration for document generation.
-- Ensure Supabase table `appointment_requests` matches all fields used in the schedule form (see previous SQL instructions).
-- For AI document generation, resolve the model instantiation error and ensure the API can use both area and subcategory filters.
-- Continue to test all flows after each major change. 
+- **Stripe Keys**: Use `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (public) and `STRIPE_SECRET_KEY` (private) for Vercel
+- **AI Chat**: Add `XAI_API_KEY` for Grok integration or `OPENROUTER_API_KEY` for OpenRouter
+- **File Upload**: Implement Supabase storage upload in `MusicServiceModal`
+- **Video Background**: Upload background video to Supabase storage and update URL
+- **Environment Variables**: Set up in Vercel dashboard → Settings → Environment Variables 

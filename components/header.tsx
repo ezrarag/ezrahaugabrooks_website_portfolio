@@ -3,9 +3,10 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, FileText, User, Menu, Play, Square } from "lucide-react"
+import { MoreHorizontal, FileText, User, Menu, Play, Square, User as UserIcon } from "lucide-react"
 import Link from "next/link"
 import { DownloadModal } from "@/components/download-modal"
+import { Dashboard } from "@/components/dashboard"
 
 interface HeaderProps {
   isPlaying?: boolean
@@ -16,6 +17,7 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [downloadType, setDownloadType] = useState<"resume" | "cv">("resume")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [showDashboard, setShowDashboard] = useState(false)
 
   const handleDownloadResume = (type: "resume" | "cv") => {
     setDownloadType(type)
@@ -92,6 +94,10 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
                   Educator
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowDashboard(true)} className="cursor-pointer text-white hover:text-white">
+                <UserIcon className="w-4 h-4 mr-2" />
+                Dashboard
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -138,6 +144,9 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
         onClose={() => setShowDownloadModal(false)}
         type={downloadType}
       />
+
+      {/* Dashboard */}
+      <Dashboard isOpen={showDashboard} onClose={() => setShowDashboard(false)} />
     </motion.header>
   )
 }
