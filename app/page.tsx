@@ -7,7 +7,7 @@ import { AiChatCenter } from "@/components/ai-chat-center"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50 text-white relative overflow-hidden">
+    <div className="h-screen bg-gray-50 text-white relative overflow-hidden">
       {/* Background Image */}
       <div className="fixed inset-0 z-0">
         <img
@@ -22,7 +22,7 @@ export default function HomePage() {
         <Header />
       </div>
       
-      <main className="container mx-auto px-6 py-12 relative z-10 flex min-h-screen items-center justify-center">
+      <main className="h-full relative z-10 flex items-center justify-center">
         {/* Main content area - cards removed */}
       </main>
 

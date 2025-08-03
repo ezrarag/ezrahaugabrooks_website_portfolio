@@ -19,6 +19,7 @@ import {
   Loader2
 } from "lucide-react"
 import { toast } from "sonner"
+import { PaymentForm } from "@/components/payment-form"
 
 interface SchedulingFormProps {
   conversationId?: string
@@ -427,45 +428,65 @@ export function SchedulingForm({ conversationId, onScheduleComplete }: Schedulin
       case "payment":
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Payment Required</h3>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-white">Payment Required</h3>
+            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="w-5 h-5 text-yellow-600" />
-                <span className="font-medium text-yellow-800">Deposit Required</span>
+                <AlertCircle className="w-5 h-5 text-yellow-300" />
+                <span className="font-medium text-yellow-200">Deposit Required</span>
               </div>
-              <p className="text-sm text-yellow-700">
+              <p className="text-sm text-yellow-200">
                 This meeting requires a ${selectedTopic?.depositAmount} deposit to secure your appointment and prepare materials.
               </p>
             </div>
             
-            <Card>
+            <Card className="bg-white/10 backdrop-blur-sm border border-white/20">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Meeting Type:</span>
-                  <span className="font-medium">{selectedTopic?.name}</span>
+                  <span className="text-sm text-white/70">Meeting Type:</span>
+                  <span className="font-medium text-white">{selectedTopic?.name}</span>
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Duration:</span>
-                  <span className="font-medium">{selectedTopic?.duration} minutes</span>
+                  <span className="text-sm text-white/70">Duration:</span>
+                  <span className="font-medium text-white">{selectedTopic?.duration} minutes</span>
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Date & Time:</span>
-                  <span className="font-medium">
+                  <span className="text-sm text-white/70">Date & Time:</span>
+                  <span className="font-medium text-white">
                     {selectedDate?.toLocaleDateString()} at {selectedTime}
                   </span>
                 </div>
-                <div className="border-t pt-2 mt-2">
+                <div className="border-t border-white/20 pt-2 mt-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-medium">Deposit Amount:</span>
-                    <span className="font-bold text-lg">${selectedTopic?.depositAmount}</span>
+                    <span className="font-medium text-white">Deposit Amount:</span>
+                    <span className="font-bold text-lg text-white">${selectedTopic?.depositAmount}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            <div className="text-center text-sm text-gray-600">
-              <p>Payment processing will be handled securely after scheduling.</p>
-            </div>
+            <PaymentForm
+              amount={selectedTopic?.depositAmount || 0}
+              appointmentData={{
+                conversationId,
+                visitorName: visitorName.trim(),
+                visitorEmail: visitorEmail.trim(),
+                requestedDate: selectedDate?.toISOString(),
+                requestedTime: selectedTime,
+                topic: selectedTopic?.id,
+                duration: selectedTopic?.duration,
+                message: message.trim(),
+                requiresDeposit: selectedTopic?.requiresDeposit,
+                depositAmount: selectedTopic?.depositAmount,
+              }}
+              onSuccess={(appointment) => {
+                setCurrentStep("confirmation")
+                onScheduleComplete?.()
+                toast.success("Appointment scheduled successfully!", {
+                  description: `Your meeting with Ezra is confirmed for ${selectedDate?.toLocaleDateString()} at ${selectedTime}`
+                })
+              }}
+              onCancel={() => setCurrentStep("details")}
+            />
           </div>
         )
 
