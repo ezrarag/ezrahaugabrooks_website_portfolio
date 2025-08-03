@@ -24,7 +24,57 @@ export default function MusicPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const data = await portfolioHelpers.getMusicProjects(true) // Get featured projects only
+        console.log("🎵 Fetching music projects...")
+        const data = await portfolioHelpers.getMusicProjects(false) // Get ALL projects, not just featured
+        
+        console.log("🎵 Raw data from Supabase:", data)
+        
+        if (!data || data.length === 0) {
+          console.log("🎵 No data returned from Supabase, using fallback")
+          // Fallback to static data if database fails or is empty
+          setFeaturedProjects([
+            {
+              id: "1",
+              title: "Symphony No. V",
+              subtitle: "Movement IV • 5:33",
+              type: "video",
+              role: "conductor",
+              composer: "Ludwig van Beethoven",
+              date: "2020-06-15",
+              location: "Atlanta, GA",
+              event: "AUCSO - CAU Board Meeting",
+              mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
+              color: "#667eea",
+            },
+            {
+              id: "2",
+              title: "Piano Sonata No. 14",
+              subtitle: "Moonlight Sonata • 15:20",
+              type: "video",
+              role: "pianist",
+              composer: "Ludwig van Beethoven",
+              date: "2021-03-10",
+              location: "Atlanta, GA",
+              event: "Solo Recital",
+              mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/Beethoven%20Moonlight%20Sonata%20-%20Complete%20Performance.MOV",
+              color: "#764ba2",
+            },
+            {
+              id: "3",
+              title: "String Quartet Op. 18",
+              subtitle: "Allegro • 8:45",
+              type: "video",
+              role: "violist",
+              composer: "Ludwig van Beethoven",
+              date: "2020-12-05",
+              location: "Atlanta, GA",
+              event: "Chamber Music Ensemble",
+              mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/Beethoven%20String%20Quartet%20Op%2018%20No%201%20-%20Allegro.MOV",
+              color: "#f093fb",
+            },
+          ])
+          return
+        }
         
         // Transform database data to match the Project interface
         const transformedProjects: Project[] = data.map((project: MusicProject) => ({
@@ -41,9 +91,10 @@ export default function MusicPage() {
           color: getProjectColor(project.id),
         }))
         
+        console.log("🎵 Transformed projects:", transformedProjects)
         setFeaturedProjects(transformedProjects.reverse()) // Reverse to match original order
       } catch (error) {
-        console.error("Error fetching music projects:", error)
+        console.error("🎵 Error fetching music projects:", error)
         // Fallback to static data if database fails
         setFeaturedProjects([
           {
@@ -58,6 +109,32 @@ export default function MusicPage() {
             event: "AUCSO - CAU Board Meeting",
             mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/AUCSO%20-%20CAU%20Board%20Meeting%20-Beethoven%205%20IV%20-%2002_21_20.MOV",
             color: "#667eea",
+          },
+          {
+            id: "2",
+            title: "Piano Sonata No. 14",
+            subtitle: "Moonlight Sonata • 15:20",
+            type: "video",
+            role: "pianist",
+            composer: "Ludwig van Beethoven",
+            date: "2021-03-10",
+            location: "Atlanta, GA",
+            event: "Solo Recital",
+            mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/Beethoven%20Moonlight%20Sonata%20-%20Complete%20Performance.MOV",
+            color: "#764ba2",
+          },
+          {
+            id: "3",
+            title: "String Quartet Op. 18",
+            subtitle: "Allegro • 8:45",
+            type: "video",
+            role: "violist",
+            composer: "Ludwig van Beethoven",
+            date: "2020-12-05",
+            location: "Atlanta, GA",
+            event: "Chamber Music Ensemble",
+            mediaUrl: "https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/Beethoven%20String%20Quartet%20Op%2018%20No%201%20-%20Allegro.MOV",
+            color: "#f093fb",
           },
         ])
       } finally {
