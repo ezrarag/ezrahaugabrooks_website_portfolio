@@ -60,25 +60,10 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-transparent" />
       </div>
 
-      {/* Play/Stop Button */}
-      <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        onClick={handlePlayPause}
-        className="fixed top-1/2 right-6 transform -translate-y-1/2 z-40 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-4 hover:bg-white/30 transition-all duration-300 group"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        {isPlaying ? (
-          <Square className="w-6 h-6 text-white" />
-        ) : (
-          <Play className="w-6 h-6 text-white ml-1" />
-        )}
-      </motion.button>
+
       
       <div className="text-white relative z-[60]">
-        <Header />
+        <Header isPlaying={isPlaying} onPlayPause={handlePlayPause} />
       </div>
       
       <main className="h-full relative z-10 flex items-center justify-center">

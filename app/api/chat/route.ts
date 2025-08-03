@@ -109,6 +109,8 @@ Conversation ID: ${conversation_id}`
     const provider = getAIProvider()
     console.log(`🤖 AI Provider: ${provider.name}`)
     console.log(`🔧 Environment AI_PROVIDER: ${process.env.AI_PROVIDER || 'default(openrouter)'}`)
+    console.log(`🔧 Messages received:`, messages)
+    console.log(`🔧 System message:`, systemMessage)
     
     try {
       const result = await createStreamResponse(provider, messages, systemMessage)

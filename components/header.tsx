@@ -3,11 +3,16 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, FileText, User, Menu } from "lucide-react"
+import { MoreHorizontal, FileText, User, Menu, Play, Square } from "lucide-react"
 import Link from "next/link"
 import { DownloadModal } from "@/components/download-modal"
 
-export function Header() {
+interface HeaderProps {
+  isPlaying?: boolean
+  onPlayPause?: () => void
+}
+
+export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const [downloadType, setDownloadType] = useState<"resume" | "cv">("resume")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
@@ -37,6 +42,22 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
+          {/* Play/Stop Button */}
+          {onPlayPause && (
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onPlayPause}
+              className="p-2 hover:bg-white/20 rounded-full transition-colors"
+            >
+              {isPlaying ? (
+                <Square className="w-5 h-5 text-white" />
+              ) : (
+                <Play className="w-5 h-5 text-white" />
+              )}
+            </motion.button>
+          )}
+
           {/* Navigation Menu */}
           <DropdownMenu open={openDropdown === "nav"} onOpenChange={(open) => setOpenDropdown(open ? "nav" : null)}>
             <DropdownMenuTrigger asChild>
