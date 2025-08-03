@@ -18,10 +18,22 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
   const [downloadType, setDownloadType] = useState<"resume" | "cv">("resume")
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [showDashboard, setShowDashboard] = useState(false)
+  const [isHeaderExpanded, setIsHeaderExpanded] = useState(false)
 
   const handleDownloadResume = (type: "resume" | "cv") => {
     setDownloadType(type)
     setShowDownloadModal(true)
+  }
+
+  const handleDashboardToggle = () => {
+    const newState = !showDashboard
+    setShowDashboard(newState)
+    setIsHeaderExpanded(newState)
+  }
+
+  const handleDashboardClose = () => {
+    setShowDashboard(false)
+    setIsHeaderExpanded(false)
   }
 
   return (
@@ -29,7 +41,9 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm"
+      className={`w-full px-6 py-6 relative z-[60] pointer-events-auto bg-black/20 backdrop-blur-sm ${
+        isHeaderExpanded ? 'min-h-[400px]' : ''
+      }`}
     >
       <div className="w-full flex items-center justify-between px-6">
         <Link href="/">
@@ -59,6 +73,20 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
               )}
             </motion.button>
           )}
+
+          {/* Dashboard Button */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleDashboardToggle}
+            className={`p-2 rounded-full transition-all duration-300 ${
+              showDashboard 
+                ? 'bg-white/30 text-white' 
+                : 'hover:bg-white/20 text-white'
+            }`}
+          >
+            <UserIcon className="w-5 h-5" />
+          </motion.button>
 
           {/* Navigation Menu */}
           <DropdownMenu open={openDropdown === "nav"} onOpenChange={(open) => setOpenDropdown(open ? "nav" : null)}>
@@ -94,10 +122,7 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
                   Educator
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowDashboard(true)} className="cursor-pointer text-white hover:text-white">
-                <UserIcon className="w-4 h-4 mr-2" />
-                Dashboard
-              </DropdownMenuItem>
+
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -145,8 +170,18 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
         type={downloadType}
       />
 
-      {/* Dashboard */}
-      <Dashboard isOpen={showDashboard} onClose={() => setShowDashboard(false)} />
+      {/* Dashboard Content */}
+      {showDashboard && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="w-full px-6 pb-6"
+        >
+          <Dashboard isOpen={showDashboard} onClose={handleDashboardClose} />
+        </motion.div>
+      )}
     </motion.header>
   )
 }

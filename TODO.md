@@ -21,9 +21,10 @@
 ## In Progress / Next Steps 🔄
 - [ ] **AI Chat Debugging**: Fix chat response issues (add environment variables)
 - [ ] **Stripe Webhook Setup**: Add webhook for production payment handling
-- [ ] **Environment Variables**: Set up XAI_API_KEY and Stripe keys for Vercel deployment
+- [ ] **Environment Variables**: Set up OpenRouter API key and Stripe keys for Vercel deployment
 - [ ] **File Upload**: Implement actual file upload to Supabase storage
 - [ ] **Video Background**: Add actual background video file to Supabase storage
+- [ ] **Dashboard UI**: Move dashboard button outside hamburger menu and implement header expansion
 
 ## Optional / Future 🚀
 - [ ] Dynamic subcategory loading from Supabase (instead of hardcoded)
@@ -36,7 +37,8 @@
 
 **Notes:**
 - **Stripe Keys**: Use `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (public) and `STRIPE_SECRET_KEY` (private) for Vercel
-- **AI Chat**: Add `XAI_API_KEY` for Grok integration or `OPENROUTER_API_KEY` for OpenRouter
+- **AI Chat**: Add `OPENROUTER_API_KEY` for OpenRouter (recommended) or `XAI_API_KEY` for Grok integration
 - **File Upload**: Implement Supabase storage upload in `MusicServiceModal`
 - **Video Background**: Upload background video to Supabase storage and update URL
-- **Environment Variables**: Set up in Vercel dashboard → Settings → Environment Variables 
+- **Environment Variables**: Set up in Vercel dashboard → Settings → Environment Variables
+- **Dashboard**: Move button outside hamburger menu and implement header expansion animation 
