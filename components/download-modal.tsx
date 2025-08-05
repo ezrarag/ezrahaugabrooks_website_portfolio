@@ -225,7 +225,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto pt-8"
           onClick={onClose}
         >
           <motion.div
@@ -233,7 +233,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden max-w-2xl w-full max-h-[90vh] flex flex-col"
+            className="bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden max-w-2xl w-full max-h-[85vh] flex flex-col my-4 mx-4"
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             {/* Header */}
