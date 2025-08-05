@@ -225,7 +225,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto pt-8"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-start justify-center p-4 overflow-y-auto pt-8"
           onClick={onClose}
         >
           <motion.div
