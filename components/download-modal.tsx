@@ -233,29 +233,29 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="bg-white rounded-lg overflow-hidden max-w-2xl w-full max-h-[90vh] flex flex-col"
+            className="bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden max-w-2xl w-full max-h-[90vh] flex flex-col"
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-white/20">
               <div className="flex items-center gap-3">
                 {type === "resume" ? (
-                  <FileText className="w-6 h-6 text-blue-600" />
+                  <FileText className="w-6 h-6 text-blue-400" />
                 ) : (
-                  <User className="w-6 h-6 text-green-600" />
+                  <User className="w-6 h-6 text-green-400" />
                 )}
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-white">
                     Download {type.toUpperCase()}
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-white/80">
                     Customize your {type} by selecting the areas you'd like to include
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-white/60 hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -267,13 +267,13 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                 {/* Area Selection */}
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Select Areas</h3>
+                    <h3 className="text-lg font-semibold text-white">Select Areas</h3>
                     <div className="flex gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={handleSelectAll}
-                        className="text-xs"
+                        className="text-xs bg-white/10 border-white/20 text-white hover:bg-white/20"
                       >
                         Select All
                       </Button>
@@ -281,7 +281,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                         variant="outline"
                         size="sm"
                         onClick={handleClearAll}
-                        className="text-xs"
+                        className="text-xs bg-white/10 border-white/20 text-white hover:bg-white/20"
                       >
                         Clear All
                       </Button>
@@ -296,8 +296,8 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                           key={area.id}
                           className={`cursor-pointer transition-all duration-200 ${
                             isSelected
-                              ? "ring-2 ring-blue-500 bg-blue-50"
-                              : "hover:bg-gray-50"
+                              ? "ring-2 ring-blue-400 bg-blue-500/20"
+                              : "hover:bg-white/10 bg-white/5"
                           }`}
                           onClick={() => handleAreaToggle(area.id)}
                         >
@@ -305,24 +305,24 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                             <div className="flex items-center gap-3">
                               <div className="text-2xl">{area.icon}</div>
                               <div className="flex-1">
-                                <h4 className="font-semibold text-gray-900">{area.name}</h4>
-                                <p className="text-sm text-gray-600">{area.description}</p>
+                                <h4 className="font-semibold text-white">{area.name}</h4>
+                                <p className="text-sm text-white/80">{area.description}</p>
                               </div>
                               {isSelected && (
-                                <Check className="w-5 h-5 text-blue-600" />
+                                <Check className="w-5 h-5 text-blue-400" />
                               )}
                             </div>
                             {/* Subcategory selection UI */}
                             {isSelected && area.subcategories && (
                               <div className="mt-4">
                                 <div className="flex items-center justify-between mb-2">
-                                  <span className="text-sm font-medium text-gray-700">Subcategories</span>
+                                  <span className="text-sm font-medium text-white/90">Subcategories</span>
                                   <div className="flex gap-2">
                                     <Button
                                       variant="outline"
                                       size="sm"
                                       onClick={e => { e.stopPropagation(); handleSelectAllSubcategories(area.id) }}
-                                      className="text-xs px-2 py-1"
+                                      className="text-xs px-2 py-1 bg-white/10 border-white/20 text-white hover:bg-white/20"
                                     >
                                       All
                                     </Button>
@@ -330,7 +330,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                                       variant="outline"
                                       size="sm"
                                       onClick={e => { e.stopPropagation(); handleClearAllSubcategories(area.id) }}
-                                      className="text-xs px-2 py-1"
+                                      className="text-xs px-2 py-1 bg-white/10 border-white/20 text-white hover:bg-white/20"
                                     >
                                       None
                                     </Button>
@@ -342,8 +342,8 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                                       key={sub.id}
                                       className={`flex items-center gap-1 px-2 py-1 rounded cursor-pointer border text-xs ${
                                         selectedSubcategories[area.id]?.includes(sub.id)
-                                          ? "bg-blue-200 border-blue-400 text-blue-900"
-                                          : "bg-gray-100 border-gray-200 text-gray-700 hover:bg-blue-50"
+                                          ? "bg-blue-400/30 border-blue-400 text-blue-200"
+                                          : "bg-white/10 border-white/20 text-white/80 hover:bg-white/20"
                                       }`}
                                       onClick={e => e.stopPropagation()}
                                     >
@@ -368,11 +368,11 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
 
                 {/* Selection Summary */}
                 {selectedAreas.length > 0 && (
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-blue-500/20 border-blue-400/30">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <Check className="w-5 h-5 text-blue-600" />
-                        <h4 className="font-semibold text-blue-900">Selected Areas & Subcategories</h4>
+                        <Check className="w-5 h-5 text-blue-400" />
+                        <h4 className="font-semibold text-blue-200">Selected Areas & Subcategories</h4>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {selectedAreas.map(areaId => {
@@ -381,7 +381,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                           const subs = selectedSubcategories[areaId] || []
                           return (
                             <span key={areaId} className="inline-flex items-center gap-1">
-                              <Badge className="bg-blue-100 text-blue-800">
+                              <Badge className="bg-blue-400/30 text-blue-200">
                                 {area.icon} {area.name}
                               </Badge>
                               {subs.length > 0 && (
@@ -389,7 +389,7 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                                   {subs.map(subId => {
                                     const sub = area.subcategories?.find(s => s.id === subId)
                                     return sub ? (
-                                      <Badge key={subId} className="bg-blue-200 text-blue-900">
+                                      <Badge key={subId} className="bg-blue-500/30 text-blue-100">
                                         {sub.name}
                                       </Badge>
                                     ) : null
@@ -405,18 +405,18 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                 )}
 
                 {/* Type-specific Information */}
-                <Card className="bg-gray-50">
+                <Card className="bg-white/10 border-white/20">
                   <CardContent className="p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4 className="font-semibold text-white mb-2">
                       About {type.toUpperCase()}s
                     </h4>
                     {type === "resume" ? (
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-white/80">
                         Resumes are concise, targeted documents focused on specific job opportunities. 
                         They highlight relevant skills and achievements for the selected areas.
                       </p>
                     ) : (
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-white/80">
                         CVs are comprehensive documents that provide a complete overview of your 
                         academic and professional background across all selected areas.
                       </p>
@@ -427,9 +427,9 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-gray-200 p-6">
+            <div className="border-t border-white/20 p-6">
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-white/80">
                   {selectedAreas.length > 0 ? (
                     <span>Ready to download {type} with {selectedAreas.length} area(s)</span>
                   ) : (
@@ -437,13 +437,13 @@ export function DownloadModal({ isOpen, onClose, type }: DownloadModalProps) {
                   )}
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="outline" onClick={onClose}>
+                  <Button variant="outline" onClick={onClose} className="bg-white/10 border-white/20 text-white hover:bg-white/20">
                     Cancel
                   </Button>
                   <Button
                     onClick={handleDownload}
                     disabled={selectedAreas.length === 0 || isGenerating}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     {isGenerating ? (
                       <>

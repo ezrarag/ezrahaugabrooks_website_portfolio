@@ -45,9 +45,10 @@ export default function HomePage() {
             ref={videoRef}
             className="w-full h-full object-cover object-center"
             onEnded={handleVideoEnded}
-            muted
+            controls
+            autoPlay
           >
-            <source src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media/background-video.mp4" type="video/mp4" />
+            <source src="https://vybiefufnvfqvggaxcyy.supabase.co/storage/v1/object/public/media//MVI_7797%20cue%2011.32%20take%201.mov" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         ) : (

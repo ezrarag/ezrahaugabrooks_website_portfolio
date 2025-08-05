@@ -117,9 +117,10 @@ export function Header({ isPlaying = false, onPlayPause }: HeaderProps) {
                   Music
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/educator" className="cursor-pointer text-white hover:text-white">
+              <DropdownMenuItem asChild disabled>
+                <Link href="#" className="cursor-not-allowed text-white/50 hover:text-white/50">
                   Educator
+                  <span className="ml-auto text-xs text-white/30">Coming Soon</span>
                 </Link>
               </DropdownMenuItem>
 
